@@ -1,0 +1,29 @@
+- class_name: 主题链接
+  class_desc: 使用的主题链接
+  link_list:
+    - name: Hexo
+      link: https://hexo.io/zh-tw/
+      avatar: https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg
+      descr: 快速、简单且强大的网誌框架
+    - name: Butterfly
+      link: https://butterfly.js.org/
+      avatar: https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg
+      descr: 丰富、炫酷的博客主题
+
+
+- class_name: 友情链接
+  class_desc: 一路上走来一直给予着我无私的帮助
+  link_list:
+    - name: 流浪的猫
+      link: https://blog.9cats.link
+      avatar: https://image.9cats.link/avatar.webp
+      descr: 流浪不同次元的猫
+    - name: BGD
+      link: https://www.bgdvroom.top
+      avatar: https://www.bgdvroom.top/img/icon.jpg
+      descr: 知足而上进，温柔而坚定
+    - name: 时王の部落阁
+      link: https://www.kissshot.cyou/
+      avatar: https://www.kissshot.cyou/assets/img/brand.png
+      descr: 问题, 方法, 程序, 标准, 解决
+
