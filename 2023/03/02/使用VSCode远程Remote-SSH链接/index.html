@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>使用VSCode远程Remote SSH链接 | Roxy Blog</title><meta name="keywords" content="SSH,Vscode"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="使用VSCode远程Remote SSH链接准备工作1、安装Vscodehttps:&#x2F;&#x2F;code.visualstudio.com&#x2F; 2、安装SSH可以通过安装 Git 来获取 SSH 功能 https:&#x2F;&#x2F;git-scm.com&#x2F; 安装git后，可在cmd命令窗输入ssh验证  3、Vscode添加插件打开Vscode，Ctrl+Shift+X快捷键打开插件扩展，输入Remote，下载第一个插件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用VSCode远程Remote SSH链接">
-<meta property="og:url" content="http://blog.roxyblog.cn/2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/index.html">
+<meta property="og:url" content="http://blog.roxyblog.cn/2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/">
 <meta property="og:site_name" content="Roxy Blog">
 <meta property="og:description" content="使用VSCode远程Remote SSH链接准备工作1、安装Vscodehttps:&#x2F;&#x2F;code.visualstudio.com&#x2F; 2、安装SSH可以通过安装 Git 来获取 SSH 功能 https:&#x2F;&#x2F;git-scm.com&#x2F; 安装git后，可在cmd命令窗输入ssh验证  3、Vscode添加插件打开Vscode，Ctrl+Shift+X快捷键打开插件扩展，输入Remote，下载第一个插件">
 <meta property="og:locale" content="zh_CN">
@@ -154,7 +154,7 @@
 <h3 id="4、生成ssh私钥、公钥"><a href="#4、生成ssh私钥、公钥" class="headerlink" title="4、生成ssh私钥、公钥"></a>4、生成ssh私钥、公钥</h3><p>先到路径<strong>C:\Users \ {用户名}\ .ssh</strong>，如图示，若里面有文件<strong>id_rsa.pub、id_rsa</strong>的话，应是<strong>已经存在</strong>私钥公钥</p>
 <p><img src="/assets/images/1013/image-20221020212856931.png" alt="image-20221020212856931"></p>
 <p>若没有则需要生成ssh私钥公钥</p>
-<p>cmd命令窗输入，{<a href="mailto:&#x79;&#111;&#117;&#114;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#x79;&#111;&#117;&#114;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a>}这里面的内容随便填，我是填的自己邮箱</p>
+<p>cmd命令窗输入，{<a href="mailto:&#x79;&#x6f;&#x75;&#x72;&#101;&#x6d;&#x61;&#x69;&#108;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#111;&#109;">&#x79;&#x6f;&#x75;&#x72;&#101;&#x6d;&#x61;&#x69;&#108;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#111;&#109;</a>}这里面的内容随便填，我是填的自己邮箱</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;&#123;youremail@example.com&#125;&quot;</span><br></pre></td></tr></table></figure>
 
 <p>之后一路回车直到文件夹内出现文件，因为我已经存在公钥私钥，再次生成会将其覆盖，这里不做演示</p>
