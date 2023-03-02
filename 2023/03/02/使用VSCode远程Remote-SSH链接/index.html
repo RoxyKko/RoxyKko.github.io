@@ -154,7 +154,7 @@
 <h3 id="4、生成ssh私钥、公钥"><a href="#4、生成ssh私钥、公钥" class="headerlink" title="4、生成ssh私钥、公钥"></a>4、生成ssh私钥、公钥</h3><p>先到路径<strong>C:\Users \ {用户名}\ .ssh</strong>，如图示，若里面有文件<strong>id_rsa.pub、id_rsa</strong>的话，应是<strong>已经存在</strong>私钥公钥</p>
 <p><img src="/assets/images/1013/image-20221020212856931.png" alt="image-20221020212856931"></p>
 <p>若没有则需要生成ssh私钥公钥</p>
-<p>cmd命令窗输入，{<a href="mailto:&#x79;&#111;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#111;&#109;">&#x79;&#111;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#111;&#109;</a>}这里面的内容随便填，我是填的自己邮箱</p>
+<p>cmd命令窗输入，{<a href="mailto:&#x79;&#111;&#117;&#114;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#x79;&#111;&#117;&#114;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a>}这里面的内容随便填，我是填的自己邮箱</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;&#123;youremail@example.com&#125;&quot;</span><br></pre></td></tr></table></figure>
 
 <p>之后一路回车直到文件夹内出现文件，因为我已经存在公钥私钥，再次生成会将其覆盖，这里不做演示</p>
