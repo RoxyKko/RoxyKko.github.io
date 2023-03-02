@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>ZCU102镜像配置和使用 | Roxy Blog</title><meta name="keywords" content="Linux,Xilinx"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ZCU102镜像配置和使用一、工具下载和准备1、7-zip​		解压用工具，下载地址 2、ADI官方Linux镜像​		进去后直接点Image file下载即可，下载地址 ​		值得注意的是  3、准备一张16G及以上的SD卡4、SD卡擦除工具​		将已经烧录镜像的SD卡或者普通SD卡清空，下载地址 5、SD卡烧录工具​		用于将Linux镜像烧录至SD卡，下载地址 6、MobaXterm工具7、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZCU102镜像配置和使用">
+<meta property="og:url" content="http://blog.roxyblog.cn/2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="ZCU102镜像配置和使用一、工具下载和准备1、7-zip​		解压用工具，下载地址 2、ADI官方Linux镜像​		进去后直接点Image file下载即可，下载地址 ​		值得注意的是  3、准备一张16G及以上的SD卡4、SD卡擦除工具​		将已经烧录镜像的SD卡或者普通SD卡清空，下载地址 5、SD卡烧录工具​		用于将Linux镜像烧录至SD卡，下载地址 6、MobaXterm工具7、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg">
+<meta property="article:published_time" content="2023-03-02T03:11:00.000Z">
+<meta property="article:modified_time" content="2023-03-02T05:13:31.286Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Xilinx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ZCU102镜像配置和使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-02 13:13:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ZCU102镜像配置和使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-02T05:13:31.286Z" title="更新于 2023-03-02 13:13:31">2023-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/ZCU102/">ZCU102</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/ZCU102/Linux/">Linux</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/ZCU102/Linux/GNU-Radio/">GNU Radio</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ZCU102镜像配置和使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="ZCU102镜像配置和使用"><a href="#ZCU102镜像配置和使用" class="headerlink" title="ZCU102镜像配置和使用"></a>ZCU102镜像配置和使用</h1><h2 id="一、工具下载和准备"><a href="#一、工具下载和准备" class="headerlink" title="一、工具下载和准备"></a>一、工具下载和准备</h2><h3 id="1、7-zip"><a href="#1、7-zip" class="headerlink" title="1、7-zip"></a>1、7-zip</h3><p>​		解压用工具，<a target="_blank" rel="noopener" href="http://www.7-zip.org/">下载地址</a></p>
+<h3 id="2、ADI官方Linux镜像"><a href="#2、ADI官方Linux镜像" class="headerlink" title="2、ADI官方Linux镜像"></a>2、ADI官方Linux镜像</h3><p>​		进去后直接点Image file下载即可，<a target="_blank" rel="noopener" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes">下载地址</a></p>
+<p>​		值得注意的是</p>
+<p><img src="/assets/images/1011/image-20221215220856172.png" alt="image-20221215220856172"></p>
+<h3 id="3、准备一张16G及以上的SD卡"><a href="#3、准备一张16G及以上的SD卡" class="headerlink" title="3、准备一张16G及以上的SD卡"></a>3、准备一张16G及以上的SD卡</h3><h3 id="4、SD卡擦除工具"><a href="#4、SD卡擦除工具" class="headerlink" title="4、SD卡擦除工具"></a>4、SD卡擦除工具</h3><p>​		将已经烧录镜像的SD卡或者普通SD卡清空，<a target="_blank" rel="noopener" href="https://www.sdcardformatter.com/">下载地址</a></p>
+<h3 id="5、SD卡烧录工具"><a href="#5、SD卡烧录工具" class="headerlink" title="5、SD卡烧录工具"></a>5、SD卡烧录工具</h3><p>​		用于将Linux镜像烧录至SD卡，<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/win32diskimager/files/latest/download?source=navbar">下载地址</a></p>
+<h3 id="6、MobaXterm工具"><a href="#6、MobaXterm工具" class="headerlink" title="6、MobaXterm工具"></a>6、MobaXterm工具</h3><h3 id="7、CP210x驱动"><a href="#7、CP210x驱动" class="headerlink" title="7、CP210x驱动"></a>7、CP210x驱动</h3><p>​			<a target="_blank" rel="noopener" href="https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip">下载地址</a></p>
+<h2 id="二、制作步骤"><a href="#二、制作步骤" class="headerlink" title="二、制作步骤"></a>二、制作步骤</h2><h3 id="1、下载好linux镜像"><a href="#1、下载好linux镜像" class="headerlink" title="1、下载好linux镜像"></a>1、下载好linux镜像</h3><h3 id="2、将SD卡插入读卡器连接到电脑"><a href="#2、将SD卡插入读卡器连接到电脑" class="headerlink" title="2、将SD卡插入读卡器连接到电脑"></a>2、将SD卡插入读卡器连接到电脑</h3><h3 id="3、用擦除工具清空SD卡"><a href="#3、用擦除工具清空SD卡" class="headerlink" title="3、用擦除工具清空SD卡"></a>3、用擦除工具清空SD卡</h3><h3 id="4、用烧录工具将镜像烧录至SD卡"><a href="#4、用烧录工具将镜像烧录至SD卡" class="headerlink" title="4、用烧录工具将镜像烧录至SD卡"></a>4、用烧录工具将镜像烧录至SD卡</h3><p>​	注意：镜像文件选下载好的linux镜像文件，无需将下载好的文件解压，其次盘符一定要看好确认是SD卡的盘符，<strong>否则会烧录到你自己的硬盘分区上</strong></p>
+<p><img src="/assets/images/1011/image-20221215221436134.png" alt="image-20221215221436134"></p>
+<h3 id="5、烧录完成后打开SD卡，找到“zynqmp-common”和“zynqmp-zcu102-rev10-adrv9009”两个文件夹，将两个文件夹内所有文件复制粘贴到SD卡的根目录下"><a href="#5、烧录完成后打开SD卡，找到“zynqmp-common”和“zynqmp-zcu102-rev10-adrv9009”两个文件夹，将两个文件夹内所有文件复制粘贴到SD卡的根目录下" class="headerlink" title="5、烧录完成后打开SD卡，找到“zynqmp-common”和“zynqmp-zcu102-rev10-adrv9009”两个文件夹，将两个文件夹内所有文件复制粘贴到SD卡的根目录下"></a>5、烧录完成后打开SD卡，找到“zynqmp-common”和“zynqmp-zcu102-rev10-adrv9009”两个文件夹，将两个文件夹内所有文件复制粘贴到SD卡的根目录下</h3><p><img src="/assets/images/1011/image-20221215221750117.png" alt="image-20221215221750117"></p>
+<p>“zynqmp-common”下是有一个image文件</p>
+<p>“zynqmp-zcu102-rev10-adrv9009”下有三个文件</p>
+<p>复制完成的文件夹样子：</p>
+<p><img src="/assets/images/1011/image-20221215221857576.png" alt="image-20221215221857576"></p>
+<h3 id="6、安装CP210x驱动"><a href="#6、安装CP210x驱动" class="headerlink" title="6、安装CP210x驱动"></a>6、安装CP210x驱动</h3><h3 id="7、ZCU102配置和MobaXtrem使用"><a href="#7、ZCU102配置和MobaXtrem使用" class="headerlink" title="7、ZCU102配置和MobaXtrem使用"></a>7、ZCU102配置和MobaXtrem使用</h3><p>其实ZCU102需要保证硬件上如下设置</p>
+<p><img src="/assets/images/1011/image-20221207162912369.png" alt="image-20221207162912369"></p>
+<p>且插入的SD卡已经写入Linux镜像即可，</p>
+<p>然后将ZCU102与我们进行操控的PC主机用USB to Micro-a相连，<strong>注意一定链接到ZCU102的UART口上</strong></p>
+<p><img src="/assets/images/1011/image-20221207163124824.png" alt="image-20221207163124824"></p>
+<p><strong>且将ZCU102至于与PC端同一局域网环境下</strong></p>
+<p>启动电源</p>
+<p>这里推荐使用MobaXterm进行控制</p>
+<p>新建会话</p>
+<p><img src="/assets/images/1011/image-20221207163424570.png" alt="新建会话"></p>
+<p>选择端口</p>
+<p><img src="/assets/images/1011/image-20221207163448349.png" alt="选择串口"></p>
+<p>波特率为115200，四个选项中一个一个创建然后按回车键实验，若出现正常Linux界面则进入正确，一般是数字的顺数第二个端口</p>
+<p><img src="/assets/images/1011/image-20221207163549517.png" alt="image-20221207163549517"></p>
+<p>这里是在进行加载Linux系统，等待加载完毕</p>
+<p><img src="/assets/images/1011/image-20221207163728120.png" alt="image-20221207163728120"></p>
+<p>正常进入板载Linux</p>
+<p><img src="/assets/images/1011/image-20221207163820704.png" alt="image-20221207163820704"></p>
+<h3 id="8、配置ZCU102默认使用DisplayPort显示"><a href="#8、配置ZCU102默认使用DisplayPort显示" class="headerlink" title="8、配置ZCU102默认使用DisplayPort显示"></a>8、配置ZCU102默认使用DisplayPort显示</h3><p><img src="/assets/images/1011/image-20221215222520655.png" alt="image-20221215222520655"></p>
+<p>在MobaXterm中输入如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@analog:~# printf &quot;Section \&quot;Device\&quot;\n  Identifier \&quot;myfb\&quot;\n  Driver \&quot;fbdev\&quot;\n  Option \&quot;fbdev\&quot; \&quot;/dev/fb0\&quot;\nEndSection\n&quot; &gt; /etc/X11/xorg.conf</span><br></pre></td></tr></table></figure>
+
+<p>再次输入以下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@analog:~# cat /etc/X11/xorg.conf </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">若显示如下，则成功，使用poweroff命令关闭linux</span></span><br><span class="line">Section &quot;Device&quot;</span><br><span class="line">  Identifier &quot;myfb&quot;</span><br><span class="line">  Driver &quot;fbdev&quot;</span><br><span class="line">  Option &quot;fbdev&quot; &quot;/dev/fb0&quot;</span><br><span class="line">EndSection</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="9、关闭ZCU102电源"><a href="#9、关闭ZCU102电源" class="headerlink" title="9、关闭ZCU102电源"></a>9、关闭ZCU102电源</h3><h3 id="10、插上OTG模块，并调整跳线帽位置"><a href="#10、插上OTG模块，并调整跳线帽位置" class="headerlink" title="10、插上OTG模块，并调整跳线帽位置"></a>10、插上OTG模块，并调整跳线帽位置</h3><p>默认不支持OTG，需要更改跳线帽位置</p>
+<p>默认状态：</p>
+<p><img src="/assets/images/1011/image-20221215222857472.png" alt="image-20221215222857472"></p>
+<p>需要更改的地方</p>
+<p><img src="/assets/images/1011/image-20221215222917163.png" alt="image-20221215222917163"></p>
+<p>更改完成后样式：</p>
+<p><img src="/assets/images/1011/image-20221215222943423.png" alt="image-20221215222943423"></p>
+<h3 id="11、连接DP线至显示器，OTG外接USB扩展坞连接键鼠，打开ZCU102电源"><a href="#11、连接DP线至显示器，OTG外接USB扩展坞连接键鼠，打开ZCU102电源" class="headerlink" title="11、连接DP线至显示器，OTG外接USB扩展坞连接键鼠，打开ZCU102电源"></a>11、连接DP线至显示器，OTG外接USB扩展坞连接键鼠，打开ZCU102电源</h3><h3 id="12、配置完成，可以使用ADI官方的Linux镜像了"><a href="#12、配置完成，可以使用ADI官方的Linux镜像了" class="headerlink" title="12、配置完成，可以使用ADI官方的Linux镜像了"></a>12、配置完成，可以使用ADI官方的Linux镜像了</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/">http://blog.roxyblog.cn/2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/Linux/">Linux</a><a class="post-meta__tags" href="../../../../tags/Xilinx/">Xilinx</a></div><div class="post_share"><div class="social-share" data-image="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/"><img class="prev-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">petalinux方式移植linux</div></div></a></div><div class="next-post pull-right"><a href="../../../../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/"><img class="next-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ZCU102+ADRV9009使用GNU Radio开发使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../../../../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-07</div><div class="title">ZCU102+ADRV9009使用GNU Radio开发使用</div></div></a></div><div><a href="../petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">petalinux方式移植linux</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">ZCU102镜像配置和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%B7%A5%E5%85%B7%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%87%86%E5%A4%87"><span class="toc-number">1.1.</span> <span class="toc-text">一、工具下载和准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%817-zip"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、7-zip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81ADI%E5%AE%98%E6%96%B9Linux%E9%95%9C%E5%83%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、ADI官方Linux镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%87%86%E5%A4%87%E4%B8%80%E5%BC%A016G%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%9A%84SD%E5%8D%A1"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、准备一张16G及以上的SD卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81SD%E5%8D%A1%E6%93%A6%E9%99%A4%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、SD卡擦除工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81SD%E5%8D%A1%E7%83%A7%E5%BD%95%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.5.</span> <span class="toc-text">5、SD卡烧录工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81MobaXterm%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.6.</span> <span class="toc-text">6、MobaXterm工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81CP210x%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.1.7.</span> <span class="toc-text">7、CP210x驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%B6%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">二、制作步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BD%E5%A5%BDlinux%E9%95%9C%E5%83%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、下载好linux镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%B0%86SD%E5%8D%A1%E6%8F%92%E5%85%A5%E8%AF%BB%E5%8D%A1%E5%99%A8%E8%BF%9E%E6%8E%A5%E5%88%B0%E7%94%B5%E8%84%91"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、将SD卡插入读卡器连接到电脑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%94%A8%E6%93%A6%E9%99%A4%E5%B7%A5%E5%85%B7%E6%B8%85%E7%A9%BASD%E5%8D%A1"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、用擦除工具清空SD卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E7%94%A8%E7%83%A7%E5%BD%95%E5%B7%A5%E5%85%B7%E5%B0%86%E9%95%9C%E5%83%8F%E7%83%A7%E5%BD%95%E8%87%B3SD%E5%8D%A1"><span class="toc-number">1.2.4.</span> <span class="toc-text">4、用烧录工具将镜像烧录至SD卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E7%83%A7%E5%BD%95%E5%AE%8C%E6%88%90%E5%90%8E%E6%89%93%E5%BC%80SD%E5%8D%A1%EF%BC%8C%E6%89%BE%E5%88%B0%E2%80%9Czynqmp-common%E2%80%9D%E5%92%8C%E2%80%9Czynqmp-zcu102-rev10-adrv9009%E2%80%9D%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%8C%E5%B0%86%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9%E5%86%85%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E5%88%B0SD%E5%8D%A1%E7%9A%84%E6%A0%B9%E7%9B%AE%E5%BD%95%E4%B8%8B"><span class="toc-number">1.2.5.</span> <span class="toc-text">5、烧录完成后打开SD卡，找到“zynqmp-common”和“zynqmp-zcu102-rev10-adrv9009”两个文件夹，将两个文件夹内所有文件复制粘贴到SD卡的根目录下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E5%AE%89%E8%A3%85CP210x%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.2.6.</span> <span class="toc-text">6、安装CP210x驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81ZCU102%E9%85%8D%E7%BD%AE%E5%92%8CMobaXtrem%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.7.</span> <span class="toc-text">7、ZCU102配置和MobaXtrem使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E9%85%8D%E7%BD%AEZCU102%E9%BB%98%E8%AE%A4%E4%BD%BF%E7%94%A8DisplayPort%E6%98%BE%E7%A4%BA"><span class="toc-number">1.2.8.</span> <span class="toc-text">8、配置ZCU102默认使用DisplayPort显示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81%E5%85%B3%E9%97%ADZCU102%E7%94%B5%E6%BA%90"><span class="toc-number">1.2.9.</span> <span class="toc-text">9、关闭ZCU102电源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10%E3%80%81%E6%8F%92%E4%B8%8AOTG%E6%A8%A1%E5%9D%97%EF%BC%8C%E5%B9%B6%E8%B0%83%E6%95%B4%E8%B7%B3%E7%BA%BF%E5%B8%BD%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.2.10.</span> <span class="toc-text">10、插上OTG模块，并调整跳线帽位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11%E3%80%81%E8%BF%9E%E6%8E%A5DP%E7%BA%BF%E8%87%B3%E6%98%BE%E7%A4%BA%E5%99%A8%EF%BC%8COTG%E5%A4%96%E6%8E%A5USB%E6%89%A9%E5%B1%95%E5%9D%9E%E8%BF%9E%E6%8E%A5%E9%94%AE%E9%BC%A0%EF%BC%8C%E6%89%93%E5%BC%80ZCU102%E7%94%B5%E6%BA%90"><span class="toc-number">1.2.11.</span> <span class="toc-text">11、连接DP线至显示器，OTG外接USB扩展坞连接键鼠，打开ZCU102电源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12%E3%80%81%E9%85%8D%E7%BD%AE%E5%AE%8C%E6%88%90%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8ADI%E5%AE%98%E6%96%B9%E7%9A%84Linux%E9%95%9C%E5%83%8F%E4%BA%86"><span class="toc-number">1.2.12.</span> <span class="toc-text">12、配置完成，可以使用ADI官方的Linux镜像了</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Noah.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Xilinx学习笔记-01"/></a><div class="content"><a class="title" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01">Xilinx学习笔记-01</a><time datetime="2022-10-08T05:34:00.000Z" title="发表于 2022-10-08 13:34:00">2022-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：?</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Stm32使用板载ADC的经验谈 | Roxy Blog</title><meta name="keywords" content="Stm32,ADC"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Stm32F407使用板载AD经验总述​	Stm32板载的ADC是我们学习使用stm32的重要功能之一，参加电赛使用stm32所必须掌握的技能，曾使用过的ADS8688模块，号称500Ksps的采样率，在我们实际使用中哪怕是启用了硬件spi也只用得到80Ksps的采样率。有幸从敬重的学姐哪里继承了一块AD7606，并行的200Ksps16位ADC模块，目前尚未去驱动，有时间去试试。 ​	言归正传，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stm32使用板载ADC的经验谈">
+<meta property="og:url" content="http://blog.roxyblog.cn/2022/08/09/Stm32%E4%BD%BF%E7%94%A8%E6%9D%BF%E8%BD%BDADC%E7%9A%84%E7%BB%8F%E9%AA%8C%E8%B0%88/index.html">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="Stm32F407使用板载AD经验总述​	Stm32板载的ADC是我们学习使用stm32的重要功能之一，参加电赛使用stm32所必须掌握的技能，曾使用过的ADS8688模块，号称500Ksps的采样率，在我们实际使用中哪怕是启用了硬件spi也只用得到80Ksps的采样率。有幸从敬重的学姐哪里继承了一块AD7606，并行的200Ksps16位ADC模块，目前尚未去驱动，有时间去试试。 ​	言归正传，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/08/09/DvtKXnuBc4w2ykZ.jpg">
+<meta property="article:published_time" content="2022-08-08T19:44:00.000Z">
+<meta property="article:modified_time" content="2022-08-15T18:14:33.576Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="Stm32">
+<meta property="article:tag" content="ADC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/09/DvtKXnuBc4w2ykZ.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2022/08/09/Stm32%E4%BD%BF%E7%94%A8%E6%9D%BF%E8%BD%BDADC%E7%9A%84%E7%BB%8F%E9%AA%8C%E8%B0%88/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Stm32使用板载ADC的经验谈',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-16 02:14:33'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2022/08/09/DvtKXnuBc4w2ykZ.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Stm32使用板载ADC的经验谈</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-08T19:44:00.000Z" title="发表于 2022-08-09 03:44:00">2022-08-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-15T18:14:33.576Z" title="更新于 2022-08-16 02:14:33">2022-08-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Stm32/">Stm32</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Stm32/%E7%BB%8F%E9%AA%8C%E8%B0%88/">经验谈</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Stm32使用板载ADC的经验谈"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Stm32F407使用板载AD经验"><a href="#Stm32F407使用板载AD经验" class="headerlink" title="Stm32F407使用板载AD经验"></a>Stm32F407使用板载AD经验</h1><h2 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h2><p>​	Stm32板载的ADC是我们学习使用stm32的重要功能之一，参加电赛使用stm32所必须掌握的技能，曾使用过的ADS8688模块，号称500Ksps的采样率，在我们实际使用中哪怕是启用了硬件spi也只用得到80Ksps的采样率。有幸从敬重的学姐哪里继承了一块AD7606，并行的200Ksps16位ADC模块，目前尚未去驱动，有时间去试试。</p>
+<p>​	言归正传，开此帖的目的是为了记录下使用板载adc进行的一些使用方法，双重、三重的交叉采样、ADC过采样、多通道规则采样等等自己使用过的方法，利弊也会一一列出，由于本人学艺不精的因素，也许也有错误存在，或是没有发挥出理想的驱动，作为抛砖引玉，希望看到我博客的能提出更好解决方法进行斧正。</p>
+<blockquote>
+<p>很难言说我现在的精神状态，现在属于是醒了打代码，困了才睡，周而复始，希望不会过于胡言乱语不知所云。</p>
+</blockquote>
+<h1 id="使用设备及MCU"><a href="#使用设备及MCU" class="headerlink" title="使用设备及MCU"></a>使用设备及MCU</h1><p>1、STlink</p>
+<p>2、STM32F407ZGT6</p>
+<p>3、实验室内的信号发生器、示波器等</p>
+<p>4、CubeMX+CubeIDE开发</p>
+<blockquote>
+<p>顺带一提，大家都知道奈奎斯特采样定理，采样率Fs应大于2倍的采集信号频率F，但是在实际使用中，如果说要对波形进行还原、FFT运算，以最简单最容易理解的也经常使用的实时采样，实时采样要采得完整的波形数字信号量，至少是Fs&gt;&#x3D;5*F，也就是说，对于大多数情况下我们使用ADC，至少需要到5倍的信号频率才能对信号完整采集。当然还有一些其他的采样算法，理论上是可以得到无限高的采样率，不过嘛，，，，都说了，理论上。</p>
+</blockquote>
+<h1 id="双重ADC快速交叉采样"><a href="#双重ADC快速交叉采样" class="headerlink" title="双重ADC快速交叉采样"></a>双重ADC快速交叉采样</h1><p>​	单个ADC采样其实收到了很多限制，一般来说我们都是使用的定时器触发来设置采样频率，以ADC+DMA的方式快速得到采集数据，但我其实并不满意其速度，顶破了天其实也就200Ksps左右，再往上其实只是采正弦波都很勉强了。</p>
+<p>​	于是在网上找到方法，ADC双重、甚至是三重交叉采样，在上一个ADC尚未转换完毕时直接将信号注入下一个ADC进行转换，理论上来说就可以成倍数的增长采样率，当时我看他们计算采样率的公式那叫一个心动啊，M级的采样率，我不是想采啥采啥。</p>
+<p>​	来看看他们的计算公式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">In this example, the system clock is 144MHz, APB2 =72MHz and ADC clock = APB2 /2.</span><br><span class="line">Since ADCCLK= 36MHz and Conversion rate = 6 cycle</span><br><span class="line">==&gt; Conversion Time = 36M/6cyc = 6Msps.</span><br></pre></td></tr></table></figure>
+
+<p>​	足足6Msps，想想都香，于是便有了这一次实验。直接开始创建工程吧。</p>
+<h2 id="建立工程"><a href="#建立工程" class="headerlink" title="建立工程"></a>建立工程</h2><p>​	选择好使用的单片机，RCC选项中HSE（高速时钟）选中外部晶振，SYS选项中记得改为Serial Wire</p>
+<h2 id="配置时钟树"><a href="#配置时钟树" class="headerlink" title="配置时钟树"></a>配置时钟树</h2><p>​	这里配置时钟树是有讲究的，这次并非直接拉满168MHz，我是照着这个算式来设置的时钟树</p>
+<p><img src="/assets/images/1003/1.png"></p>
+<p>144&#x2F;4&#x3D;36；周期我们设置的6个adc周期；理论采样率为36&#x2F;6&#x3D;6M</p>
+<h2 id="ADC和DMA设置"><a href="#ADC和DMA设置" class="headerlink" title="ADC和DMA设置"></a>ADC和DMA设置</h2><p>​	先将ADC1、ADC2打开，选择一样的IN口，我这里选的是IN12，其实无所谓，可以随便选的，这里DMA Access Mode要先把ADC1、ADC2的Resolution采样精度从默认的12bit改成8bit才能选中DMA access mode 3，之后再试试其他设置可不可行</p>
+<p><img src="/assets/images/1003/2.png"></p>
+<p>​	接下来是ADC2的设置</p>
+<p><img src="/assets/images/1003/3.png"></p>
+<p>​	DMA只需要打开ADC1的即可，同时要把ADC1的DMA continuous Requests DMA连续请求打开，ADC2的DMA连续请求是无法更改的，只能一会代码生成后去更改。这里有三个注意的地方，ADC1、2的设置照上面两张图对照配。</p>
+<p><img src="/assets/images/1003/4.png"></p>
+<p>​	还有一个重要的一点，点开设置区，更改这里的顺序，定时器不用管，这个是我用来计算采样率用的，要求顺序一定是ADC1&gt;DMA&gt;ADC2，否则会导致采样只采样一次便终止。</p>
+<p><img src="/assets/images/1003/5.png"></p>
+<p>​	接下来生成代码，而代码区还有很多需要更改才能使用</p>
+<h2 id="生成代码的修改"><a href="#生成代码的修改" class="headerlink" title="生成代码的修改"></a>生成代码的修改</h2><p>​	点开与main.c同级目录的adc.c，直接跳到<strong>HAL_ADC2_Init(void)<strong>函数，找到以下代码，将</strong>DISABLE</strong>改为<strong>ENABLE</strong>，使能ADC2的DMA连续请求，大概在代码的113行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;</span><br><span class="line">hadc2.Init.NbrOfConversion = <span class="number">1</span>;</span><br><span class="line">hadc2.Init.DMAContinuousRequests = ENABLE; <span class="comment">//这一句</span></span><br><span class="line">hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;</span><br></pre></td></tr></table></figure>
+
+<p>​	再往下翻到<strong>HAL_ADC_MspInit</strong>函数，对这个函数我们将在前插入**__HAL_RCC_ADC2_CLK_ENABLE();**使能ADC2时钟，再将判断的语句删除，即删去if判断语句和else内的全部内容，更改后代码如下</p>
+<blockquote>
+<p>注意，这里的更改每次生成代码都需要重新更改</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_MspInit</span><span class="params">(ADC_HandleTypeDef* adcHandle)</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  GPIO_InitTypeDef GPIO_InitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="comment">//这里删去if判断和&#123;</span></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN ADC1_MspInit 0 */</span></span><br><span class="line">  __HAL_RCC_ADC2_CLK_ENABLE();	<span class="comment">//这里添加ADC2时钟使能</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END ADC1_MspInit 0 */</span></span><br><span class="line">    <span class="comment">/* ADC1 clock enable */</span></span><br><span class="line">    __HAL_RCC_ADC1_CLK_ENABLE();</span><br><span class="line"></span><br><span class="line">    __HAL_RCC_GPIOC_CLK_ENABLE();</span><br><span class="line">    <span class="comment">/**ADC1 GPIO Configuration</span></span><br><span class="line"><span class="comment">    PC2     ------&gt; ADC1_IN12</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    GPIO_InitStruct.Pin = GPIO_PIN_2;</span><br><span class="line">    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;</span><br><span class="line">    GPIO_InitStruct.Pull = GPIO_NOPULL;</span><br><span class="line">    HAL_GPIO_Init(GPIOC, &amp;GPIO_InitStruct);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ADC1 DMA Init */</span></span><br><span class="line">    <span class="comment">/* ADC1 Init */</span></span><br><span class="line">    hdma_adc1.Instance = DMA2_Stream0;</span><br><span class="line">    hdma_adc1.Init.Channel = DMA_CHANNEL_0;</span><br><span class="line">    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;</span><br><span class="line">    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;</span><br><span class="line">    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;</span><br><span class="line">    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;</span><br><span class="line">    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;</span><br><span class="line">    hdma_adc1.Init.Mode = DMA_CIRCULAR;</span><br><span class="line">    hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;</span><br><span class="line">    hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;</span><br><span class="line">    <span class="keyword">if</span> (HAL_DMA_Init(&amp;hdma_adc1) != HAL_OK)</span><br><span class="line">    &#123;</span><br><span class="line">      Error_Handler();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    __HAL_LINKDMA(adcHandle,DMA_Handle,hdma_adc1);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN ADC1_MspInit 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END ADC1_MspInit 1 */</span></span><br><span class="line"><span class="comment">//这里删去&#125;和else的所有内容</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="主函数的使用"><a href="#主函数的使用" class="headerlink" title="主函数的使用"></a>主函数的使用</h2><p>​	回到main.c首先先创建变量</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DMA传输值</span></span><br><span class="line">__IO <span class="type">uint16_t</span> uhADCDualConvertedValue = <span class="number">0</span>;	</span><br><span class="line"><span class="comment">//ADC1电压值</span></span><br><span class="line"><span class="type">float</span> uwADC1ConvertedVoltage;</span><br><span class="line"><span class="comment">//ADC2电压值</span></span><br><span class="line"><span class="type">float</span> uwADC2ConvertedVoltage;</span><br><span class="line"><span class="comment">//ADC1AD值</span></span><br><span class="line"><span class="type">uint8_t</span> uwADC1ConvertedValue;</span><br><span class="line"><span class="comment">//ADC2AD值</span></span><br><span class="line"><span class="type">uint8_t</span> uwADC2ConvertedValue;</span><br></pre></td></tr></table></figure>
+
+<p>一个重要的关系是DMA传输值和ADC1、ADC2的AD值的关系，在前面DMA的设置中，我们设置的DMA数据传输单位是Word，即一个字，一个字由四个字节组成，而一个值正好为Half Word，即一个半字，由两个字节组成，其实答案就很明显了，高位半字用来存放ADC2的数据，而低位半字用来存放ADC1的数据。官方的文档上写的是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A DMA request is generated each time 2 data items are available</span><br><span class="line">1st request: ADC_CDR[15:0] = (ADC2_DR[7:0] &lt;&lt; 8) | ADC1_DR[7:0] </span><br><span class="line">2nd request: ADC_CDR[15:0] = (ADC2_DR[7:0] &lt;&lt; 8) | ADC1_DR[7:0]</span><br></pre></td></tr></table></figure>
+
+<p>意思是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">每发送一个DMA请求（两个数据可用），就好以字的形式传输表示两个ADC转换数据项的两个半字。</span><br><span class="line">高位半字用来存放ADC2的数据，而低位半字用来存放ADC1的数据，以此类推。</span><br></pre></td></tr></table></figure>
+
+<p>创建好变量后，来到主函数。</p>
+<blockquote>
+<p>先等初始化完毕后，先打开ADC2，再打开ADC1的多重ADC模式DMA，顺序一定不能错！！！</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line">  MX_GPIO_Init();</span><br><span class="line">  MX_ADC1_Init();</span><br><span class="line">  MX_DMA_Init();</span><br><span class="line">  MX_ADC2_Init();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line"><span class="comment">//是的就这两句，顺序不对会导致只能采一次，折磨我一天从早八到现在凌晨三点才解决</span></span><br><span class="line">  HAL_ADC_Start(&amp;hadc2);</span><br><span class="line">  HAL_ADCEx_MultiModeStart_DMA(&amp;hadc1, (<span class="type">uint32_t</span>*)&amp;uhADCDualConvertedValue, <span class="number">1</span>);</span><br><span class="line">  <span class="comment">/* USER CODE END 2 */</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="采值数据转换"><a href="#采值数据转换" class="headerlink" title="采值数据转换"></a>采值数据转换</h2><p>我们已经采值到uhADCDualConvertedValue了，接下来将其转换为电压值，不要放到while(1)循环里，会不起作用，只有使用ADC中断回调才能变换，但是我怀疑中断回调对采样率造成了影响，这个我们后面再说。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 4 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_ConvCpltCallback</span><span class="params">(ADC_HandleTypeDef* hadc)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//取低半字，0xff就是4095的16进制写法而已,单纯我喜欢这样写而已</span></span><br><span class="line">	uwADC1ConvertedValue = (uhADCDualConvertedValue &amp; <span class="number">0x00FF</span>);</span><br><span class="line">	uwADC1ConvertedVoltage = uwADC1ConvertedValue * <span class="number">3.3</span> / <span class="number">0xFF</span>;</span><br><span class="line">	<span class="comment">//取高半字</span></span><br><span class="line">	uwADC2ConvertedValue = (uhADCDualConvertedValue &gt;&gt; <span class="number">8</span>);</span><br><span class="line"><span class="comment">//	uwADC2ConvertedVoltage = uwADC2ConvertedValue * 3.3 / 0xFF;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实际测量和优化实验"><a href="#实际测量和优化实验" class="headerlink" title="实际测量和优化实验"></a>实际测量和优化实验</h2><p>​	实际测量下，照上面的写法，我新增了一个1s的定时器，并使能中断，再在adc中断回调函数里面设置了每次执行自加2的计数值，并在定时器中断里取得值并且归零，以此来计算1s内采样到的值，即粗略判断采样频率。</p>
+<p>​	然而，其实不过仅仅是68640，仅仅68ksps！而且还只是8bit的采样，采样精度十分令人不满意，速度也没有达到理想的6M。</p>
+<p>​	但理论和实际差的实在太多，我也希望能找出原因来，然后我认为可能是浮点数的运算影响了采样速率，我将ADC中断回调函数更改至以下样式</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_ConvCpltCallback</span><span class="params">(ADC_HandleTypeDef* hadc)</span></span><br><span class="line">&#123;</span><br><span class="line">	uwADC1ConvertedValue = (uhADCDualConvertedValue &amp; <span class="number">0x00FF</span>);</span><br><span class="line"><span class="comment">//	uwADC1ConvertedVoltage = uwADC1ConvertedValue * 3.3 / 0xFF;</span></span><br><span class="line">	count++;</span><br><span class="line">	uwADC2ConvertedValue = (uhADCDualConvertedValue &gt;&gt; <span class="number">8</span>);</span><br><span class="line"><span class="comment">//	uwADC2ConvertedVoltage = uwADC2ConvertedValue * 3.3 / 0xFF;</span></span><br><span class="line">	count++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	注释掉浮点数运算后，再进行测量，结果是达到了392856,也就是392Ksps，虽然只是8bit的精度，但其实速率很好的上去了，可以进行间断采样的方式，先将值采到足够大的数组去，再暂停采样，进行数据处理、分析，结束后再次采样，以此循环。这样就是一个很好的高速AD方案了。我没有打开FPU，打开FPU后前面在ADC中断回调函数里面进行浮点数运算的速度应该能再进一步提升。</p>
+<p>​	之后，我又将中断回调函数内仅仅留下计数值自加的式子</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_ConvCpltCallback</span><span class="params">(ADC_HandleTypeDef* hadc)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//	uwADC1ConvertedValue = (uhADCDualConvertedValue &amp; 0x00FF);</span></span><br><span class="line"><span class="comment">//	uwADC1ConvertedVoltage = uwADC1ConvertedValue * 3.3 / 0xFF;</span></span><br><span class="line">	count++;</span><br><span class="line"><span class="comment">//	uwADC2ConvertedValue = (uhADCDualConvertedValue &gt;&gt; 8);</span></span><br><span class="line"><span class="comment">//	uwADC2ConvertedVoltage = uwADC2ConvertedValue * 3.3 / 0xFF;</span></span><br><span class="line">	count++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	结果是采样速率进一步得到了提升，达到了418600,418K的sps，去掉了移位操作，采样率直接提升了6.5%。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​	其实早已有理论和实际差别很大的心理准备，因为如果真的能那么理想化实现，ST公司肯定会铺天盖地的宣传，也不至于大家都基本用的ADC+DMA+定时器中断。</p>
+<p>​	总的来说，双重ADC交叉采样确实是能满足一定的高速需求，但8bit的精度我认为实在有点差，之后可以采取定时器触发的方式来设置采样频率，这里使用软件触发的方式也是试图测出其能达到的上限。		</p>
+<p>​	当然，也许真的有办法实现更加贴近理论计算的配置方法，但我现在也尚未知晓，等我先去尝试一下其他的方法，有时间再对配置优化处理。</p>
+<blockquote>
+<p>注意，我这里使用的计算频率的方法不一定是正确的，也有很多漏洞，但我一时想不出来较好的计算实际采样频率的方法，故以此粗略简陋办法进行计算，也许也有错误存在，若对此对读者进行误导则先行道歉。</p>
+</blockquote>
+<h1 id="三重ADC快速交替采样"><a href="#三重ADC快速交替采样" class="headerlink" title="三重ADC快速交替采样"></a>三重ADC快速交替采样</h1><p>​	试试三重ADC快速交替采样，首先先看看英文文档描述</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">How to use the ADC peripheral to convert a regular channel in Triple </span><br><span class="line">interleaved mode.</span><br><span class="line"></span><br><span class="line">The Triple interleaved delay is configured 5 ADC clk cycles.</span><br><span class="line"></span><br><span class="line">In Triple ADC mode, three DMA requests are generated: </span><br><span class="line">- On the first request, both ADC2 and ADC1 data are transferred (ADC2 data take </span><br><span class="line">  the upper half-word and ADC1 data take the lower half-word). </span><br><span class="line">- On the second request, both ADC1 and ADC3 data are transferred (ADC1 data take</span><br><span class="line">  the upper half-word and ADC3 data take the lower half-word).</span><br><span class="line">- On the third request, both ADC3 and ADC2 data are transferred (ADC3 data take </span><br><span class="line">  the upper half-word and ADC2 data take the lower half-word) and so on.</span><br><span class="line"></span><br><span class="line">On each DMA request (two data items are available) two half-words representing </span><br><span class="line">two ADC-converted data items are transferred as a word.</span><br></pre></td></tr></table></figure>
+
+<p>机翻翻译是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">如何使用ADC外设转换常规通道在三重</span><br><span class="line">交错模式。</span><br><span class="line"></span><br><span class="line">“三重交错延时”配置为5个ADC时钟周期。</span><br><span class="line"></span><br><span class="line">在Triple ADC模式下，生成3个DMA请求:</span><br><span class="line">—第一次请求时，同时传输ADC2和ADC1数据(ADC2数据取</span><br><span class="line">上半字和ADC1数据取下半字)。</span><br><span class="line">—第二个请求同时传输ADC1和ADC3数据(ADC1数据取</span><br><span class="line">上半字和ADC3数据取下半字)。</span><br><span class="line">—第三次请求时，同时传输ADC3和ADC2数据(ADC3数据取</span><br><span class="line">上半字和ADC2数据取下半字)等等。</span><br><span class="line"></span><br><span class="line">对于每个DMA请求(两个数据项可用)，两个半字表示</span><br><span class="line">两个adc转换的数据项作为一个字传输。</span><br></pre></td></tr></table></figure>
+
+<p>有点意思，以三次请求为一个循环，创建数组依照顺序就是</p>
+<blockquote>
+<p>ADC1[第一次DMA传回数据下半字]&gt;&gt;</p>
+<p>ADC2[第一次DMA传回数据上半字]&gt;&gt;</p>
+<p>ADC3[第二次DMA传回数据下半字]&gt;&gt;</p>
+<p>ADC1[第二次DMA传回数据上半字]&gt;&gt;</p>
+<p>ADC2[第三次DMA传回数据下半字]&gt;&gt;</p>
+<p>ADC3[第三次DMA传回数据上半字]；</p>
+<p>以此循环</p>
+</blockquote>
+<p>但我看英文文档里面的示例是直接求均值，顺便给他均值滤波了，也是个不错的方案。</p>
+<p>描述是ADC123都使用通道12进行交叉采样，通过这种方法能达到12bit精度的6M采样率，周期间隔设置为5个ADC周期</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">The ADC1, ADC2 and ADC3 are configured to convert ADC Channel 12.</span><br><span class="line">By this way, the ADC can reach 6Msps, in fact the same channel is converted</span><br><span class="line">each 5 cycles</span><br><span class="line">144/4=36；周期我们设置的5个adc周期；理论采样率为36/5=7.2M</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h2><p>​	RCC、SYS、时钟树配置与做二重交叉采样相同，直接来看ADC的选项设置</p>
+<p>​	ADC三个都选择通道12，回到ADC1，选择三重交叉模式，通道连续转换使能，去开启DMA后使能DMA连续转换模式，ADC2、ADC3保持默认设置</p>
+<p><img src="/assets/images/1003/6.png"></p>
+<p>​	DMA设置还是只打开ADC1的DMA，配置与双重交叉采样时相同，这里直接用相同的图片</p>
+<p><img src="/assets/images/1003/7.png"></p>
+<p>​	生成代码</p>
+<h2 id="生成代码修改"><a href="#生成代码修改" class="headerlink" title="生成代码修改"></a>生成代码修改</h2><p>​	直接进到adc.c里的HAL_ADC_MspInit函数，删去if判断语句和后续else所有内容，加入启用ADC2、ADC3时钟代码，其他无需修改</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_MspInit</span><span class="params">(ADC_HandleTypeDef* adcHandle)</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  GPIO_InitTypeDef GPIO_InitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="comment">//删去if判断语句</span></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN ADC1_MspInit 0 */</span></span><br><span class="line">  <span class="comment">//ADC2、ADC3时钟使能</span></span><br><span class="line">	  __HAL_RCC_ADC2_CLK_ENABLE();</span><br><span class="line">	  __HAL_RCC_ADC3_CLK_ENABLE();</span><br><span class="line">  <span class="comment">/* USER CODE END ADC1_MspInit 0 */</span></span><br><span class="line">    <span class="comment">/* ADC1 clock enable */</span></span><br><span class="line">    __HAL_RCC_ADC1_CLK_ENABLE();</span><br><span class="line"></span><br><span class="line">    __HAL_RCC_GPIOC_CLK_ENABLE();</span><br><span class="line">    <span class="comment">/**ADC1 GPIO Configuration</span></span><br><span class="line"><span class="comment">    PC2     ------&gt; ADC1_IN12</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    GPIO_InitStruct.Pin = GPIO_PIN_2;</span><br><span class="line">    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;</span><br><span class="line">    GPIO_InitStruct.Pull = GPIO_NOPULL;</span><br><span class="line">    HAL_GPIO_Init(GPIOC, &amp;GPIO_InitStruct);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ADC1 DMA Init */</span></span><br><span class="line">    <span class="comment">/* ADC1 Init */</span></span><br><span class="line">    hdma_adc1.Instance = DMA2_Stream0;</span><br><span class="line">    hdma_adc1.Init.Channel = DMA_CHANNEL_0;</span><br><span class="line">    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;</span><br><span class="line">    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;</span><br><span class="line">    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;</span><br><span class="line">    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;</span><br><span class="line">    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;</span><br><span class="line">    hdma_adc1.Init.Mode = DMA_CIRCULAR;</span><br><span class="line">    hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;</span><br><span class="line">    hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;</span><br><span class="line">    <span class="keyword">if</span> (HAL_DMA_Init(&amp;hdma_adc1) != HAL_OK)</span><br><span class="line">    &#123;</span><br><span class="line">      Error_Handler();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    __HAL_LINKDMA(adcHandle,DMA_Handle,hdma_adc1);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN ADC1_MspInit 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE END ADC1_MspInit 1 */</span></span><br><span class="line">	<span class="comment">//后续else语句全部删除</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="主运行代码"><a href="#主运行代码" class="headerlink" title="主运行代码"></a>主运行代码</h2><p>​	回到main.c，首先创建变量</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__IO <span class="type">uint32_t</span> aADCTripleConvertedValue[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<p>​	在初始化以后，添加启用adc函数，注意初始化的顺序，如果照着不能实现，试试更改初始化代码的顺序至和现在示例一致试试看</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line"> MX_GPIO_Init();</span><br><span class="line"> MX_ADC1_Init();</span><br><span class="line"> MX_DMA_Init();</span><br><span class="line"> MX_ADC3_Init();</span><br><span class="line"> MX_ADC2_Init();</span><br><span class="line"> <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line"> HAL_ADC_Start(&amp;hadc3);</span><br><span class="line"> HAL_ADC_Start(&amp;hadc2);</span><br><span class="line"> HAL_ADCEx_MultiModeStart_DMA(&amp;hadc1, (<span class="type">uint32_t</span>*)aADCTripleConvertedValue, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就可以存储采样值了，再看看均值滤波转换的方法</p>
+<p>更改变量为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__IO <span class="type">uint32_t</span> aADCTripleConvertedValue[<span class="number">128</span>];</span><br><span class="line"><span class="type">uint32_t</span> ADC3ConvertedVoltage;</span><br><span class="line"><span class="type">uint8_t</span> i;</span><br><span class="line"><span class="type">float</span> res;</span><br></pre></td></tr></table></figure>
+
+<p>主运行代码为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">HAL_ADC_Start(&amp;hadc3);</span><br><span class="line">HAL_ADC_Start(&amp;hadc2);</span><br><span class="line">HAL_ADCEx_MultiModeStart_DMA(&amp;hadc1, (<span class="type">uint32_t</span>*)aADCTripleConvertedValue, <span class="number">128</span>);</span><br><span class="line"><span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Infinite loop */</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">ADC3ConvertedVoltage = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">128</span>; i++) &#123;</span><br><span class="line">	ADC3ConvertedVoltage += (aADCTripleConvertedValue[i] &lt;&lt; <span class="number">16</span>) &gt;&gt; <span class="number">16</span>;</span><br><span class="line">	ADC3ConvertedVoltage += aADCTripleConvertedValue[i] &gt;&gt; <span class="number">16</span>;</span><br><span class="line">&#125;</span><br><span class="line">ADC3ConvertedVoltage = ADC3ConvertedVoltage / <span class="number">256</span>;<span class="comment">//128数组分成高低半字那肯定*2啊</span></span><br><span class="line">res = ADC3ConvertedVoltage * <span class="number">3.29</span> / <span class="number">4096</span>;</span><br><span class="line">  <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	这个转换方法是我从毅子哥推荐的博主eric2013硬汉的帖子里找到的，来自安富莱电子的硬汉嵌入式论坛，我从其中学到了很多，推荐大家多看看学习。大佬eric2013又高又硬，强。</p>
+<h2 id="实际测量和优化实验-1"><a href="#实际测量和优化实验-1" class="headerlink" title="实际测量和优化实验"></a>实际测量和优化实验</h2><p>​	我将实验前面我使用的方法来粗略的测量采样频率，设置定时器2中断，周期1s</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//变量区</span></span><br><span class="line"><span class="comment">/* Private variables ---------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line">__IO <span class="type">uint32_t</span> aADCTripleConvertedValue[<span class="number">128</span>];</span><br><span class="line"><span class="type">uint32_t</span> ADC3ConvertedVoltage;</span><br><span class="line"><span class="type">uint8_t</span> i;</span><br><span class="line"><span class="type">float</span> res;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> count=<span class="number">0</span>;</span><br><span class="line"><span class="type">uint32_t</span> Hz=<span class="number">0</span>;</span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br></pre></td></tr></table></figure>
+
+<p>主函数区</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line">  MX_GPIO_Init();</span><br><span class="line">  MX_ADC1_Init();</span><br><span class="line">  MX_DMA_Init();</span><br><span class="line">  MX_ADC3_Init();</span><br><span class="line">  MX_ADC2_Init();</span><br><span class="line">  MX_TIM2_Init();</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">  HAL_TIM_Base_Start_IT(&amp;htim2);</span><br><span class="line">  HAL_ADC_Start(&amp;hadc3);</span><br><span class="line">  HAL_ADC_Start(&amp;hadc2);</span><br><span class="line">  HAL_ADCEx_MultiModeStart_DMA(&amp;hadc1, (<span class="type">uint32_t</span>*)aADCTripleConvertedValue, <span class="number">128</span>);</span><br><span class="line">  <span class="comment">/* USER CODE END 2 */</span></span><br><span class="line">  <span class="comment">//while(1)中已经注释</span></span><br></pre></td></tr></table></figure>
+
+<p>中断回调区</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 4 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_ConvCpltCallback</span><span class="params">(ADC_HandleTypeDef* hadc)</span></span><br><span class="line">&#123;</span><br><span class="line">	ADC3ConvertedVoltage = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">128</span>; i++) &#123;</span><br><span class="line">		ADC3ConvertedVoltage += (aADCTripleConvertedValue[i] &lt;&lt; <span class="number">16</span>) &gt;&gt; <span class="number">16</span>;</span><br><span class="line">		ADC3ConvertedVoltage += aADCTripleConvertedValue[i] &gt;&gt; <span class="number">16</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	ADC3ConvertedVoltage = ADC3ConvertedVoltage / <span class="number">256</span>;</span><br><span class="line">	res = ADC3ConvertedVoltage * <span class="number">3.29</span> / <span class="number">4096</span>;</span><br><span class="line">	count+=<span class="number">256</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(htim-&gt;Instance == htim2.Instance)</span><br><span class="line">	&#123;</span><br><span class="line">		Hz=count;</span><br><span class="line">		count=<span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 4 */</span></span><br></pre></td></tr></table></figure>
+
+<p>​	经实验测试，HZ为4517632，也就是4.5M采样频率！！！！！！！！！且这是没有启用FPU浮点数运算的，启用FPU后说不定还能有提升，我们首先将浮点数运算注释。再进行一次。</p>
+<p>​	再一次检验得到，Hz&#x3D;4702208，即4.7M，也许是我飘了，0.2M已经是200Ksps了我居然觉得就提升这么一点啊，乐。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>​	也许实际采样频率并不是我这种粗略计算得到的数值，但得到4.5M我是没有想到的，这一个结果出乎意料，令我十分惊喜，接下来还需要在实际使用中试试看是否真的有4.5M的12bitADC转换。</p>
+<p>​	虽然说将板载的3个ADC变得只能有一个能用，但很多时候也仅仅只需要一个高速集来即可，总的来说若真能发挥出这样的表现，那将有很多种用处。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2022/08/09/Stm32%E4%BD%BF%E7%94%A8%E6%9D%BF%E8%BD%BDADC%E7%9A%84%E7%BB%8F%E9%AA%8C%E8%B0%88/">http://blog.roxyblog.cn/2022/08/09/Stm32%E4%BD%BF%E7%94%A8%E6%9D%BF%E8%BD%BDADC%E7%9A%84%E7%BB%8F%E9%AA%8C%E8%B0%88/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/Stm32/">Stm32</a><a class="post-meta__tags" href="../../../../tags/ADC/">ADC</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2022/08/09/DvtKXnuBc4w2ykZ.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../../11/CubeIDE%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"><img class="prev-cover" src="https://s2.loli.net/2022/08/11/9c41GJjCBTXWIxf.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CubeIDE使用记录</div></div></a></div><div class="next-post pull-right"><a href="../../08/%E5%AD%A6%E4%B9%A0%E4%BD%BF%E7%94%A8FreeRTOS%E7%B3%BB%E7%BB%9F/"><img class="next-cover" src="https://s2.loli.net/2022/08/08/YIxrAof6KdzJiPs.png" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">学习使用FreeRTOS系统</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../../../09/23/CubeMX%E9%85%8D%E7%BD%AEH743%E4%BD%BF%E7%94%A87%E5%AF%B8RGB%E5%B1%8F/" title="CubeMX配置H743使用7寸RGB屏"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/铁驭.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-23</div><div class="title">CubeMX配置H743使用7寸RGB屏</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Stm32F407%E4%BD%BF%E7%94%A8%E6%9D%BF%E8%BD%BDAD%E7%BB%8F%E9%AA%8C"><span class="toc-number">1.</span> <span class="toc-text">Stm32F407使用板载AD经验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">总述</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%AE%BE%E5%A4%87%E5%8F%8AMCU"><span class="toc-number">2.</span> <span class="toc-text">使用设备及MCU</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8C%E9%87%8DADC%E5%BF%AB%E9%80%9F%E4%BA%A4%E5%8F%89%E9%87%87%E6%A0%B7"><span class="toc-number">3.</span> <span class="toc-text">双重ADC快速交叉采样</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%B7%A5%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">建立工程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%97%B6%E9%92%9F%E6%A0%91"><span class="toc-number">3.2.</span> <span class="toc-text">配置时钟树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADC%E5%92%8CDMA%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">ADC和DMA设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="toc-number">3.4.</span> <span class="toc-text">生成代码的修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">3.5.</span> <span class="toc-text">主函数的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%87%E5%80%BC%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2"><span class="toc-number">3.6.</span> <span class="toc-text">采值数据转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E6%B5%8B%E9%87%8F%E5%92%8C%E4%BC%98%E5%8C%96%E5%AE%9E%E9%AA%8C"><span class="toc-number">3.7.</span> <span class="toc-text">实际测量和优化实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.8.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E9%87%8DADC%E5%BF%AB%E9%80%9F%E4%BA%A4%E6%9B%BF%E9%87%87%E6%A0%B7"><span class="toc-number">4.</span> <span class="toc-text">三重ADC快速交替采样</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%B7%A5%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text">创建工程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="toc-number">4.2.</span> <span class="toc-text">生成代码修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%BF%90%E8%A1%8C%E4%BB%A3%E7%A0%81"><span class="toc-number">4.3.</span> <span class="toc-text">主运行代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E6%B5%8B%E9%87%8F%E5%92%8C%E4%BC%98%E5%8C%96%E5%AE%9E%E9%AA%8C-1"><span class="toc-number">4.4.</span> <span class="toc-text">实际测量和优化实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">4.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Noah.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Xilinx学习笔记-01"/></a><div class="content"><a class="title" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01">Xilinx学习笔记-01</a><time datetime="2022-10-08T05:34:00.000Z" title="发表于 2022-10-08 13:34:00">2022-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://s2.loli.net/2022/08/09/DvtKXnuBc4w2ykZ.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：?</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

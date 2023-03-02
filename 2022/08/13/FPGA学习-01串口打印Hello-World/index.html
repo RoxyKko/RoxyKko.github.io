@@ -1,0 +1,388 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>FPGA学习--01串口打印Hello World | Roxy Blog</title><meta name="keywords" content="FPGA"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="学习FPGA ​	感谢wiki学长传承的FPGA，FreeRTOS的学习暂时告一段落，已经学到信号量了，但是FreeRTOS东西太多了，懒狗又不想干活了。中间穿插着学习FPGA作为一点调剂。  ​	哦，这板子功能实在太强了，甚至可以外接显示器，让我先买根miniHDMI线，这个板子甚至可以跑linux来做opencv的图像处理。学习FPGA也能增强自己的硬件知识、数电知识，之后甚至可以与stm32">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA学习--01串口打印Hello World">
+<meta property="og:url" content="http://blog.roxyblog.cn/2022/08/13/FPGA%E5%AD%A6%E4%B9%A0-01%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0Hello-World/index.html">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="学习FPGA ​	感谢wiki学长传承的FPGA，FreeRTOS的学习暂时告一段落，已经学到信号量了，但是FreeRTOS东西太多了，懒狗又不想干活了。中间穿插着学习FPGA作为一点调剂。  ​	哦，这板子功能实在太强了，甚至可以外接显示器，让我先买根miniHDMI线，这个板子甚至可以跑linux来做opencv的图像处理。学习FPGA也能增强自己的硬件知识、数电知识，之后甚至可以与stm32">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png">
+<meta property="article:published_time" content="2022-08-13T14:01:00.000Z">
+<meta property="article:modified_time" content="2023-03-02T05:12:03.794Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2022/08/13/FPGA%E5%AD%A6%E4%B9%A0-01%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0Hello-World/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'FPGA学习--01串口打印Hello World',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-02 13:12:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">FPGA学习--01串口打印Hello World</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-13T14:01:00.000Z" title="发表于 2022-08-13 22:01:00">2022-08-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-02T05:12:03.794Z" title="更新于 2023-03-02 13:12:03">2023-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/FPGA/">FPGA</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/FPGA/Zynq-SDK/">Zynq SDK</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="FPGA学习--01串口打印Hello World"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="学习FPGA"><a href="#学习FPGA" class="headerlink" title="学习FPGA"></a>学习FPGA</h1><blockquote>
+<p>​	感谢wiki学长传承的FPGA，FreeRTOS的学习暂时告一段落，已经学到信号量了，但是FreeRTOS东西太多了，<del>懒狗又不想干活了</del>。中间穿插着学习FPGA作为一点调剂。</p>
+</blockquote>
+<p>​	哦，这板子功能实在太强了，甚至可以外接显示器，让我先买根miniHDMI线，这个板子甚至可以跑linux来做opencv的图像处理。学习FPGA也能增强自己的硬件知识、数电知识，之后甚至可以与stm32双机处理，stm32作为任务调度，功能强大的FPGA用来进行数据处理。甚至使用FPGA搭建硬件门电路节省我们组硬件开发的时间，单纯将FPGA当做硬件电路来使用。</p>
+<p>​	同时，还有学习使用ZYNQ 嵌入式系统的开发的目的。</p>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p>​			硬件开发环境：Vivado 2018.3</p>
+<p>​			软件开发环境：SDK 2018.3</p>
+<p>​			硬件系统：Z7-Lite 7010 版</p>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><p>​	首先我们来了解一下一个完整的 ZYNQ 嵌入式系统的组成部分：</p>
+<p>​		1、系统内核：ARM Cortex-A9；</p>
+<p>​		2、存储器：DDR3 Memory Controller+存储芯片；</p>
+<p>​		3、其他外设；</p>
+<p>​		4、外部电路组件；</p>
+<p>​		5、应用程序。</p>
+<blockquote>
+<p>​	一个正确的ZYNQ嵌入式系统开发，应当是结合我们要完成的系统目标，逐步进行：</p>
+<ul>
+<li>第一步：创建Vivada工程</li>
+<li>第二步：使用IP核创建处理器系统</li>
+<li>第三步：生成顶层文件并导出硬件描述文件到SDK</li>
+<li>第四步：在SDK中创建应用程序</li>
+<li>第五步：在硬件电路板上验证功能</li>
+</ul>
+</blockquote>
+<p>  下面，我们将按照上面介绍的内容，一步步搭建实现项目目标的嵌入式系统。</p>
+<h1 id="Demo1：串口打印“Hello，World”"><a href="#Demo1：串口打印“Hello，World”" class="headerlink" title="Demo1：串口打印“Hello，World”"></a>Demo1：串口打印“Hello，World”</h1><pre><code>    “Hello World!”是各类编程教程中最经典的实验，无数软件工程师都是从“Hello World”开始自己的编程之路。我们也沿袭这一传统，从串口打印“Hello World”开始我们 ZYNQ 的学习之路。
+</code></pre>
+<h2 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h2><h3 id="创建Vivado工程"><a href="#创建Vivado工程" class="headerlink" title="创建Vivado工程"></a>创建Vivado工程</h3><p>​	打开 Vivado，在 Vivado 主界面点击“Quick Start”栏的“Creat Project”，点击Next，然后命名和设置文件路径，勾选“Creat project subdirectiry”,在文件夹下创建工程子目录，点击“Next”</p>
+<p><img src="/assets/images/1005/1.png"></p>
+<p>​	进入图示界面保持默认选项”RTL Project”即可，对于不需要添加源文件和约束文件的项目，可以勾选“Don not specify source at this time”。</p>
+<p><img src="/assets/images/1005/2.png"></p>
+<p>​	在器件选型界面选择 ZYNQ 芯片的型号，该型号一定要和开发板上芯片的型号一致。</p>
+<blockquote>
+<p><strong>在选型界面 Family 栏里选择“Zynq_7000”系列，Speed 栏选择“-1”，在 Package 栏选择“clg400”。然后根据 ZYNQ 芯片的型号，在下面的器件列表里面选择“xc7z010clg400-1”</strong></p>
+</blockquote>
+<p>​	最后选择Finish完成工程创建进入工程信息界面。</p>
+<p><img src="/assets/images/1005/3.png"></p>
+<p>​	之后进入工程信息界面，显示该工程的一些信息，在此界面可以查看之前设置的工程名、器件型号等信息，检查是否有设置错误的地方。如果设置有误，可以点击信息栏错误的地方返回之前的设置界面重新设置。</p>
+<p><img src="/assets/images/1005/4.png"></p>
+<p>​	工程创建完成后我们就开始系统硬件部分的设计，Vivado 提供了一个面向对象的设计工具——IP 集成器（IP intergator），在 IP 集成器中可以非常简单的添加各种官方提供或自己编写的各种功能模块（IP）,并配置相关参数。而且它支持大部分官方 IP 接口的智能自动连接、一键式 IP 子系统生成和实时 DRC 等功能，极大的提高了开发效率，降低出错的风险，即使面对复杂庞大的系统也能完成快速搭建。</p>
+<p>​	点击左侧导航栏（Flow Navigator）中的 IP Integrator 选项下的 Creat Block Design。然后在弹出的对话框中输入所创建的 Block Design 的名称，在 Design name 栏中输入“hello_world”,点击“OK”。</p>
+<p><img src="/assets/images/1005/5.png"></p>
+<h3 id="创建IP"><a href="#创建IP" class="headerlink" title="创建IP"></a>创建IP</h3><p>​	点击界面中间的“+”或者按快捷键 Ctrl+ I，或者在空白区域点击鼠标右键，选择“ADD IP”。之后会弹出可添加的 IP 目录，在搜索栏中输入“ZYNQ”,在搜索结果中找到“ZYNQ Processing System”并双击，将该处理器系统 IP 添加到设计中。</p>
+<p><img src="/assets/images/1005/6.png"></p>
+<p><img src="/assets/images/1005/7.png"></p>
+<p>​	添加完成后，模块 IP 出现在 Diagram 中</p>
+<p><img src="/assets/images/1005/8.png"></p>
+<p>​	双击添加的 ZYNQ7 Processing System 模块，进入 ZYNQ 处理系统配置界面。页面左侧显示导航面板，右侧为配置信息面板。</p>
+<p><img src="/assets/images/1005/9.png"></p>
+<p>​	点击左侧“Clock Configuration”，显示 ZYNQ PS 端的时钟频率配置页面，此处的各个时钟频率保持默认设置，因为本实验不需要用到 PL 部分，所以点开“PL Fabric Clock”，取消勾选“FCLK_CLK0”</p>
+<p>​	除此之外，我们还要取消一些与 PL 相关设置的勾选，点击“PS-PLConfiguration”，在右侧展开 General 下的 Enable Clock Resets， 取消勾选其中的 FCLK_RESET0_N。</p>
+<p>​	在当前界面中展开 AXI Non Secure Enablement 下的 GP Master AXIInterface，取消勾选其中的 MAXI GP0 interface。</p>
+<p><img src="/assets/images/1005/10.png"></p>
+<p><img src="/assets/images/1005/11.png"></p>
+<p><img src="/assets/images/1005/12.png"></p>
+<p>​	“Peripheral I&#x2F;O Pins”，右侧显示出引脚配置界面，在这里我们可以看到哪些引脚可以被配置成那些相应的功能。根据板子的原理图，选择MIO13、MIO14的串口，如图示，<strong>下面图还有一个问题，右上角Bank 1里3.3V应改为LVCMOS 1.8V，原因是单纯使用串口用不到3.3V，1.8V足够了，能够降低功耗，包括前面取消三个时钟，全因为都是用不到，所以取消。</strong></p>
+<blockquote>
+<p>这些取消还有一个原因，是为了培养好的系统设计习惯，多余的部分毫不犹豫的去掉，只保留应有的功能需要，尽可能的降低功耗。</p>
+</blockquote>
+<p><img src="/assets/images/1005/13.png"></p>
+<p><img src="/assets/images/1005/14.png"></p>
+<p>​	点击左侧的“MIO Configuration”，在右侧展开 I&#x2F;O Peripherals-&gt;UART1，因为我们使用的引脚为 MIO14 和 MIO15，属于 Bank0。在此处可以看到具体的引脚配置信息。其中 MIO15 为 TX 引脚方向为输出，MIO14 为 RX 引脚方向为输入，引脚电压为 3.3V，速度为 slow，使能上拉</p>
+<p><img src="/assets/images/1005/15.png"></p>
+<p>​	回到PS-PL Configuration，这里用于设置串口的波特率，这里默认为115200</p>
+<p><img src="/assets/images/1005/16.png"></p>
+<p>​	点击左侧“DDR Cfinguration”，选择 DDR 器件的型号，点开 DDR Controller Configuration 下拉按钮，在 Memory Part 一栏选择“MT41J256M16 RE-125”，总线宽度选择 16bit。</p>
+<p><img src="/assets/images/1005/17.png"></p>
+<p>​	这样我们的配置就完成了，点击“OK”，保存配置并返回。</p>
+<p>​	回到主界面我们会看到 ZYNQ7 模块发生了变化，对比之前发现少了部分接口，这是因为我们取消了关于 PL 的部分设置。</p>
+<p>​	之后点击上图中的“Run Block Automation”，弹窗全选，点击“OK”，软件会自动为 IP 添加输入输出端口以及各个 IP 之间的连接，因为本实验只用到一个 IP，所以系统只引出了两组信号。</p>
+<p>​	配置完成的 IP 如下图所示，点击接口旁边的“+”可以看到展开两组接口，查看其中具体的信号有哪些。</p>
+<p><img src="/assets/images/1005/18.png"></p>
+<p><img src="/assets/images/1005/19.png"></p>
+<p>​	当前实验不需要添加其他 IP，快捷键 Ctrl + S 保存当前设计，点击工具栏的Validate Design 按钮（红框圈选按钮）验证当前的设计。验证完成后弹出对话框提示没有错误或者关键警告，点击“OK”</p>
+<p><img src="/assets/images/1005/20.png"></p>
+<p>​	如果出现错误或严重警告说明之前的配置有问题，需要返回重新检查配置是否有遗漏或错误。</p>
+<h3 id="生产顶层HDL并导出"><a href="#生产顶层HDL并导出" class="headerlink" title="生产顶层HDL并导出"></a>生产顶层HDL并导出</h3><p>​	设计完成后需要生成顶层 HDL 模块，在 Sources 窗口，选中 Design Source下的 hello_world.bd，右键点击 hello_world.bd，在弹出的菜单中选择“Generate Output Products”</p>
+<p><img src="/assets/images/1005/21.png"></p>
+<p><img src="/assets/images/1005/22.png"></p>
+<p><img src="/assets/images/1005/23.png"></p>
+<p>​	在对话框中 Synthesis Options 选择 Global； Run Setings 用于设置生成过程中要使用的处理器的线程数，进行多线程处理，保持默认或设置为个人电脑最大可使用线程数的一半。然后点击“Generate”来生成设计的综合、实现和仿真文件。</p>
+<p>​	Generate 完成后，在弹出的对话框中点击“OK”。</p>
+<p>​	在 Sources 窗 口 ， 选 中 Design Source 下 的 hello_world.bd ， 右 键 点 击hello_world.bd，在弹出的菜单中选择“Create HDL Wrapper”</p>
+<p>​	在弹出的对话框中确认勾选“Let Vivado manage wrapper and auto-update”，然后点击“OK”。</p>
+<p><img src="/assets/images/1005/24.png"></p>
+<p><img src="/assets/images/1005/25.png"></p>
+<p>这样我们的硬件设计就创建完成了，完成的 Design Source 结构</p>
+<p><img src="/assets/images/1005/26.png"></p>
+<p>​	对于用到 PL 部分资源的项目需要添加引脚约束并进行综合、实现并生成Bitstream 文件。由于本实验未用到 PL 部分，所以无需上述步骤，可直接导出硬件到 SDK 即可。</p>
+<p>​	在菜单栏选择 File &gt; Export &gt; Export hardware。</p>
+<p><img src="/assets/images/1005/27.png"></p>
+<p>​	在弹出的对话框中可以选则是否包含 Bitstream 文件，因为我们没有生成Bitstream 文件，所以不勾选，点击“OK”。</p>
+<p><img src="/assets/images/1005/28.png"></p>
+<p>​	硬件导出完成后，在菜单栏中选择 File &gt; Launch SDK，启动 SDK 开发环境。对与弹出的对话框，直接点击OK。</p>
+<p><img src="/assets/images/1005/29.png"></p>
+<p>​	到这里，我们就完成了系统硬件部分的设计，接下来需要到 SDK 软件中进行应用程序开发，也就是软件设计部分。</p>
+<h2 id="软件设计"><a href="#软件设计" class="headerlink" title="软件设计"></a>软件设计</h2><p>​	完成硬件设计的时候我们将硬件设计导出并打开了 SDK 软件，软件界面如下</p>
+<p><img src="/assets/images/1005/30.png"></p>
+<p>​	在编辑框中可以看到打开的 system.hdf 文件，这就是我们导出的硬件描述文件，上面显示了整个系统的地址映射信息</p>
+<p>​	现在我们开始软件部分的设计。首先在菜单栏选择 File &gt; New &gt; Application Project, 新建一个 SDK 应用工程。在弹出的对话框中，输入工程名“hello_world”，其他选项保持默认，点击“Next”。</p>
+<p><img src="/assets/images/1005/31.png"></p>
+<p>​	在弹出的对话框中选择希望使用的工程模板，这里我们选择“Hello World”，然后点击“Finish”。</p>
+<p><img src="/assets/images/1005/32.png"></p>
+<p>​	之后 SDK 创建了一个 hello_world 应用工程和 hello_world_bsp 板级支持包（BSP）工程，同时 SDK 会自动对工程进行编译，并生成可执行 ELF 文件“hello_world.elf”</p>
+<p>​	双击打开 hello_world&#x2F;src 工程目录下 helloworld.c 文件，可以看到源代码。</p>
+<p><img src="/assets/images/1005/33.png"></p>
+<p>​	在 SDK 中修改并保存源文件后，软件会自动对文件进行重新编译。可以在下面的控制台面板中查看编译进度，编译完成后会显示“Finished building”。另外也可以点击工具栏中的“Build All”或者快捷键 Ctrl + B 来编译工程，到此我们就完成了软件设计的工作，接下来验证功能能否实现。</p>
+<h2 id="下载验证"><a href="#下载验证" class="headerlink" title="下载验证"></a>下载验证</h2><p>​	跳线帽选中 JTAG 启动，连接两根Type-C线至电脑主机，打开串口软件连接</p>
+<p><img src="/assets/images/1005/34.png"></p>
+<p>​	连接成功后，下载程序。右键点击 hello_world 工程，在弹出的菜单栏中选择 Run as &gt; 1 Launch on Hardware(sysntem Debugger)</p>
+<p><img src="/assets/images/1005/35.png"></p>
+<p>​	烧录完成后程序会自动运行，可以在 Terminal 窗口看到芯片通过串口发送的字符“Hello World”</p>
+<p><img src="/assets/images/1005/36.png"></p>
+<p>​	窗口成功打印出了“Hello World”字符串，说明我们的硬件和软件设计都是没有问题的。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>​	通过一个简单的工程，我们初步了解了一些 ZYNQ SDK 项目的开发流程和一些软件的操作方法，在此基础上，可以通过多次重复本实验熟悉各个步骤的操作流程和各选项的功能，熟悉开发环境，为以后的学习工作打下坚实的基础。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2022/08/13/FPGA%E5%AD%A6%E4%B9%A0-01%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0Hello-World/">http://blog.roxyblog.cn/2022/08/13/FPGA%E5%AD%A6%E4%B9%A0-01%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0Hello-World/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/FPGA/">FPGA</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../../15/FPGA%E5%AD%A6%E4%B9%A0-02%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED/"><img class="prev-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">FPGA学习--02按键控制LED</div></div></a></div><div class="next-post pull-right"><a href="../../11/CubeIDE%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"><img class="next-cover" src="https://s2.loli.net/2022/08/11/9c41GJjCBTXWIxf.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CubeIDE使用记录</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../../15/FPGA%E5%AD%A6%E4%B9%A0-02%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED/" title="FPGA学习--02按键控制LED"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-15</div><div class="title">FPGA学习--02按键控制LED</div></div></a></div><div><a href="../../15/FPGA%E5%AD%A6%E4%B9%A0-03%E6%8C%89%E9%94%AE%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6LED/" title="FPGA学习--03按键中断控制LED"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/100412674_p0_master1200.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-15</div><div class="title">FPGA学习--03按键中断控制LED</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0FPGA"><span class="toc-number">1.</span> <span class="toc-text">学习FPGA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">开发流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Demo1%EF%BC%9A%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0%E2%80%9CHello%EF%BC%8CWorld%E2%80%9D"><span class="toc-number">2.</span> <span class="toc-text">Demo1：串口打印“Hello，World”</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">硬件设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAVivado%E5%B7%A5%E7%A8%8B"><span class="toc-number">2.1.1.</span> <span class="toc-text">创建Vivado工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAIP"><span class="toc-number">2.1.2.</span> <span class="toc-text">创建IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E9%A1%B6%E5%B1%82HDL%E5%B9%B6%E5%AF%BC%E5%87%BA"><span class="toc-number">2.1.3.</span> <span class="toc-text">生产顶层HDL并导出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.2.</span> <span class="toc-text">软件设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.</span> <span class="toc-text">下载验证</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">3.</span> <span class="toc-text">后记</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Noah.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Xilinx学习笔记-01"/></a><div class="content"><a class="title" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01">Xilinx学习笔记-01</a><time datetime="2022-10-08T05:34:00.000Z" title="发表于 2022-10-08 13:34:00">2022-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：?</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

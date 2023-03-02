@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>petalinux方式移植linux | Roxy Blog</title><meta name="keywords" content="Xilinx,Petalinux"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="petalinux方式移植linux使用Ubuntu 16.04LST 22.04我用成功安装过一次petalinux,之后重装以后不知道为什么一直安装出问题，折磨了我两三天，换用16.04什么问题都没有 vivado2018.3(Windows下) + petalinux 2018.3(Linux下) petalinux中文手册 petalinux安装x ​1234sudo apt-get in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="petalinux方式移植linux">
+<meta property="og:url" content="http://blog.roxyblog.cn/2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/index.html">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="petalinux方式移植linux使用Ubuntu 16.04LST 22.04我用成功安装过一次petalinux,之后重装以后不知道为什么一直安装出问题，折磨了我两三天，换用16.04什么问题都没有 vivado2018.3(Windows下) + petalinux 2018.3(Linux下) petalinux中文手册 petalinux安装x ​1234sudo apt-get in">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png">
+<meta property="article:published_time" content="2023-03-02T04:34:00.000Z">
+<meta property="article:modified_time" content="2023-03-02T05:03:06.698Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="Xilinx">
+<meta property="article:tag" content="Petalinux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'petalinux方式移植linux',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-02 13:03:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">petalinux方式移植linux</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-02T05:03:06.698Z" title="更新于 2023-03-02 13:03:06">2023-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="petalinux方式移植linux"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="petalinux方式移植linux"><a href="#petalinux方式移植linux" class="headerlink" title="petalinux方式移植linux"></a>petalinux方式移植linux</h1><p>使用Ubuntu 16.04LST</p>
+<p>22.04我用成功安装过一次petalinux,之后重装以后不知道为什么一直安装出问题，折磨了我两三天，换用16.04什么问题都没有</p>
+<p>vivado2018.3(Windows下) + petalinux 2018.3(Linux下)</p>
+<p><a target="_blank" rel="noopener" href="https://docs.xilinx.com/v/u/zh-CN/ug1144-petalinux-tools-reference-guide">petalinux中文手册</a></p>
+<h2 id="petalinux安装"><a href="#petalinux安装" class="headerlink" title="petalinux安装"></a>petalinux安装</h2><h3 id="x-​"><a href="#x-​" class="headerlink" title="x ​"></a>x ​</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tofrodos iproute2 gawk gcc g++ git make net-tools libncurses5-dev \</span><br><span class="line">tftpd zlib1g:i386 libssl-dev flex bison libselinux1 gnupg wget diffstat chrpath socat \</span><br><span class="line">xterm autoconf libtool tar unzip texinfo zlib1g-dev gcc-multilib build-essential \</span><br><span class="line">libsdl1.2-dev libglib2.0-dev screen pax gzip automake -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、官网下载PetaLinux，地址"><a href="#2、官网下载PetaLinux，地址" class="headerlink" title="2、官网下载PetaLinux，地址"></a>2、官网下载PetaLinux，<a target="_blank" rel="noopener" href="http://www.xilinx.com/petalinux">地址</a></h3><p>​		选择需要的版本，这里选择和Vivado版本相同的2018.3</p>
+<h3 id="3、创建文件夹"><a href="#3、创建文件夹" class="headerlink" title="3、创建文件夹"></a>3、创建文件夹</h3><p>注意：安装后此目录被保存在环境PRTALINUX里，因此不要随便移动位置。这种大型应用我选择放在opt下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /opt</span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/pkg/petalinux/2018.3</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、来到下载的petalinux安装包目录下使用以下指令安装petalinux"><a href="#4、来到下载的petalinux安装包目录下使用以下指令安装petalinux" class="headerlink" title="4、来到下载的petalinux安装包目录下使用以下指令安装petalinux"></a>4、来到下载的petalinux安装包目录下使用以下指令安装petalinux</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./petalinux-v2018.3-final-installer.run /opt/pkg/petalinux/2018.3</span><br></pre></td></tr></table></figure>
+
+<p>运行上述命令后，需要等待一段时间，当出现“Press Enter to display the license agreements”字样的时候，按回车查看，按q退出，退出后输入y，回车，如此重复三次，才开始正式安装</p>
+<h3 id="5、当遇到未安装python此类的Error，跳转此链接有解决方法"><a href="#5、当遇到未安装python此类的Error，跳转此链接有解决方法" class="headerlink" title="5、当遇到未安装python此类的Error，跳转此链接有解决方法"></a>5、当遇到未安装python此类的Error，跳转<a target="_blank" rel="noopener" href="https://blog.csdn.net/pigyyf/article/details/109692324?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167457750516800211570889%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=167457750516800211570889&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-109692324-null-null.142%5Ev71%5Eone_line,201%5Ev4%5Eadd_ask&utm_term=Detected%20python%20version%20is%20less%20than%20the%20expected%202.7.3&spm=1018.2226.3001.4187">此链接</a>有解决方法</h3><p><img src="/assets/images/1012/image-20230125003249394.png" alt="image-20230125003249394"></p>
+<h3 id="6、修改-bash"><a href="#6、修改-bash" class="headerlink" title="6、修改 bash"></a>6、修改 bash</h3><p>petalinux 工具需要主机系统的&#x2F;bin&#x2F;sh 是 bash，而 Ubuntu 默认的&#x2F;bin&#x2F;sh 是 dash，所以这里需要进行更改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg-reconfigure dash</span><br></pre></td></tr></table></figure>
+
+<p><img src="/assets/images/1012/image-20230203214145110.png" alt="image-20230203214145110"></p>
+<p>选择“No”按下回车即可。</p>
+<h2 id="petalinux使用"><a href="#petalinux使用" class="headerlink" title="petalinux使用"></a>petalinux使用</h2><h3 id="1、设置-Petalinux-环境变量"><a href="#1、设置-Petalinux-环境变量" class="headerlink" title="1、设置 Petalinux 环境变量"></a>1、设置 Petalinux 环境变量</h3><p>每次第一次打开终端输入</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /opt/pkg/petalinux/2018.3/settings.shls</span><br></pre></td></tr></table></figure>
+
+<p>会点linux的可以自己设置别名或者自己设置自动载入，这里不细说</p>
+<h2 id="2、创建-petalinux-工程"><a href="#2、创建-petalinux-工程" class="headerlink" title="2、创建 petalinux 工程"></a>2、创建 petalinux 工程</h2><p>在当前路径创建工程命令</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create -t project --template &lt;PLATFORM&gt; --name &lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&lt; PLATFORM &gt;有三种选项</p>
+<ul>
+<li>zynqMP (for UltraScale + MPSoC)</li>
+<li>zynq (for Zynq)</li>
+<li>microblaze (for MicroBlaze)</li>
+</ul>
+<p>&lt; PROJECT_NAME &gt;顾名思义工程名称</p>
+<p>示例</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create -t project --template zynqMP --name adrv9009_zcu102</span><br></pre></td></tr></table></figure>
+
+<p>创建成功显示</p>
+<p><img src="/assets/images/1012/image-20230203215711892.png" alt="image-20230203215711892"></p>
+<h3 id="3、引入HDL文件"><a href="#3、引入HDL文件" class="headerlink" title="3、引入HDL文件"></a>3、引入HDL文件</h3><p>进入创建的工程的文件夹</p>
+<p>然后再用该命令导入hdl文件的目录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config --get-hw-description &lt;path to hdf file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意是目录，不是hdl文件</p>
+<p>Hdf 文件导入成功之后会自动弹出 petalinux 工程配置窗口</p>
+<p>示例</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> adrv9009_zcu102</span><br><span class="line">petalinux-config --get-hw-description /home/noah/WorkSpace/zcu102/adrv9009_zcu102.sdk/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/assets/images/1012/image-20230203220217124.png" alt="image-20230203220217124"></p>
+<h3 id="4、进入petalinux设置窗口"><a href="#4、进入petalinux设置窗口" class="headerlink" title="4、进入petalinux设置窗口"></a>4、进入petalinux设置窗口</h3><blockquote>
+<p>使用方法：</p>
+<p>​	通过键盘上的“↑”和“↓”键来选择要配置的菜单，按下“Enter”键进入子菜单。菜单中高亮的字母就是此菜单的热键，在键盘上按下此高亮字母对应的键可以快速选中对应的菜单。选中子菜单以后按下“Y”键就会将相应的配置选项写入配置文件中，菜单前面变为“&lt;*&gt;”。按下“N”键不编译相应的代码，按下“M”键就会将相应的代码编译为模块，菜单前面变为“<M>”。按两下“Esc”键退出，也就是返回到上一级，按下“?”键查看此菜单的帮助信息，按下“&#x2F;”键打开搜索框，可以在搜索框输入要搜索的内容。 </p>
+</blockquote>
+<p>这里使用官方的给的demo做示例</p>
+<p>找个地方git clone</p>
+<p>注意，我们用的版本是petalinux 2018.3，下载完以后要记得切换到2019_R1分支，此版本是支持2018.3的，否则<code>ERROR: Unable to start bitbake server</code></p>
+<p><img src="/assets/images/1012/image-20230204003352590.png" alt="image-20230204003352590"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/analogdevicesinc/meta-adi.git</span><br><span class="line"><span class="built_in">cd</span> meta-adi/</span><br><span class="line">git checkout 2019_R1</span><br></pre></td></tr></table></figure>
+
+<p>在petalinux窗口，选择 Yocto Settings-&gt;User layers，然后添加刚刚clone的文件夹下两个下属文件夹meta-adi-xilinx 和 meta-adi-core 的路径</p>
+<blockquote>
+<p>​	重要提示：由于该层依赖于meta-adi-core（因为用户空间工具），因此必须将其包含在meta-adi-core之后，否则**<code>petalinux-config</code>**将失败。</p>
+</blockquote>
+<p><img src="/assets/images/1012/image-20230203220941700.png" alt="image-20230203220941700"></p>
+<p>进入“Image Packaging Configuration” 子菜单</p>
+<p>第一个选项便是根文件系统的类型的配置，默认为 INITRAMFS，也可以选择 SD card</p>
+<p><img src="/assets/images/1012/image-20230203223217342.png" alt="image-20230203223217342"></p>
+<blockquote>
+<p>​	INITRAMFS 类型的根文件系统每次重新启动 linux 系统都是全新的、未改动过的，也 就是说启动系统后进行的所有修改掉电后就全部丢失了，再次重新启动还是之前未修改过的根 文件系统，选择 SD card 可以将根文件系统放在 SD 卡的 ext4 分区，这样启动系统后进行的所</p>
+</blockquote>
+<p>选择Save保存后一路选择Exit退出</p>
+<p>成功截图</p>
+<p><img src="/assets/images/1012/image-20230203225557383.png" alt="image-20230203225557383"></p>
+<h3 id="5、配置-Linux-内核"><a href="#5、配置-Linux-内核" class="headerlink" title="5、配置 Linux 内核"></a>5、配置 Linux 内核</h3><p>终端输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c kernel</span><br></pre></td></tr></table></figure>
+
+<p>保持默认，Exit退出</p>
+<h3 id="6、选择适合正在构建的项目的设备树"><a href="#6、选择适合正在构建的项目的设备树" class="headerlink" title="6、选择适合正在构建的项目的设备树"></a>6、选择适合正在构建的项目的设备树</h3><p>配置完成后，转到 &lt;path-to-meta-adi&gt;&#x2F;recipes-bsp&#x2F;device-tree 并打开 device-tree.bbappend 文件。在文件中将 KERNEL_DTB 变量设置为适合您的 FPGA 载体和 FMC 卡的变量。</p>
+<p>意思是，进入下载好的<code>meta-adi</code>文件夹下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/WorkSpace/meta-adi/meta-adi-xilinx/recipes-bsp/device-tree</span><br><span class="line">gedit device-tree.bbappend </span><br><span class="line"><span class="comment"># ctrl f 搜索 KERNEL_DTB 将其变量内的值改为</span></span><br><span class="line"><span class="comment"># KERNEL_DTB = &quot;zynqmp-zcu102-rev10-adrv9009&quot;</span></span><br><span class="line"><span class="comment"># 在它的下方也有写它所支持的zynq、zynqmp、microblaze</span></span><br></pre></td></tr></table></figure>
+
+<p>示意图</p>
+<p><img src="/assets/images/1012/image-20230204005826953.png" alt="image-20230204005826953"></p>
+<p>保存退出</p>
+<h3 id="7、编译项目"><a href="#7、编译项目" class="headerlink" title="7、编译项目"></a>7、编译项目</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">petalinux-build</span><br></pre></td></tr></table></figure>
+
+<p>当遇到此种错误，系<code>Failed to fetch URL git://github.com/analogdevicesinc/libiio.git;branch=2019_R1</code>失败造成的，先打开http和https的proxy（系统代理），然后键入，将git：&#x2F;&#x2F;替换为http或者https</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global url.<span class="string">&quot;https://&quot;</span>.insteadOf git://</span><br></pre></td></tr></table></figure>
+
+<p>实在不行还是Error的终极解决方法，因为要下载这个<a target="_blank" rel="noopener" href="https://github.com/Xilinx/linux-xlnx.git">Xilinx官方验证过的linux内核</a>，这文件很大，经常下载途中断联导致报错，折磨我到凌晨四点</p>
+<p>导入下面设置git参数，不需要了可以在<code>~/.gitconfig</code>里面删去</p>
+<p><img src="/assets/images/1012/image-20230302112723370.png" alt="image-20230302112723370"></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git config --global url.<span class="string">&quot;https://gitclone.com/&quot;</span>.insteadOf https://</span><br><span class="line"></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/tendermint/tendermint.git</span><br><span class="line"></span><br><span class="line">git config --global url.<span class="string">&quot;https://gitclone.com/&quot;</span>.insteadOf git://</span><br></pre></td></tr></table></figure>
+
+<p><img src="/assets/images/1012/image-20230204113550221.png" alt="image-20230204113550221"></p>
+<p>经过漫长的编译过程成功后应该是这样的：</p>
+<p><img src="/assets/images/1012/image-20230204114003699.png" alt="image-20230204114003699"></p>
+<p>他这里会有一个error，说写入到“&#x2F;tftpboot”目录时出错。这些错误消息仅供参考，不会影响输出image。可以在系统级配置中的<code>Image Packing Configuration </code>(镜像打包配置)中关闭<code>Copy final images to tftpboot</code>（将最终映像复制到 tftpboot）这一选项来根除此Error。</p>
+<h3 id="8、启动平台"><a href="#8、启动平台" class="headerlink" title="8、启动平台"></a>8、启动平台</h3><p>构建 BOOT.bin，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --boot --fsbl --fpga --u-boot</span><br></pre></td></tr></table></figure>
+
+<p>输出文件将放在<code>path-to-petalinux-project&gt;/images/linux</code>. </p>
+<p><img src="/assets/images/1012/image-20230204115410525.png" alt="image-20230204115410525"></p>
+<p>还需要烧录到sd卡，等待之后续写出详细教程</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/">http://blog.roxyblog.cn/2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/Xilinx/">Xilinx</a><a class="post-meta__tags" href="../../../../tags/Petalinux/">Petalinux</a></div><div class="post_share"><div class="social-share" data-image="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/"><img class="prev-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用VSCode远程Remote SSH链接</div></div></a></div><div class="next-post pull-right"><a href="../ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/"><img class="next-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ZCU102镜像配置和使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">ZCU102镜像配置和使用</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux"><span class="toc-number">1.</span> <span class="toc-text">petalinux方式移植linux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#petalinux%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">petalinux安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#x-%E2%80%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">x ​</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%98%E7%BD%91%E4%B8%8B%E8%BD%BDPetaLinux%EF%BC%8C%E5%9C%B0%E5%9D%80"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、官网下载PetaLinux，地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、创建文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%9D%A5%E5%88%B0%E4%B8%8B%E8%BD%BD%E7%9A%84petalinux%E5%AE%89%E8%A3%85%E5%8C%85%E7%9B%AE%E5%BD%95%E4%B8%8B%E4%BD%BF%E7%94%A8%E4%BB%A5%E4%B8%8B%E6%8C%87%E4%BB%A4%E5%AE%89%E8%A3%85petalinux"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、来到下载的petalinux安装包目录下使用以下指令安装petalinux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E5%BD%93%E9%81%87%E5%88%B0%E6%9C%AA%E5%AE%89%E8%A3%85python%E6%AD%A4%E7%B1%BB%E7%9A%84Error%EF%BC%8C%E8%B7%B3%E8%BD%AC%E6%AD%A4%E9%93%BE%E6%8E%A5%E6%9C%89%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.5.</span> <span class="toc-text">5、当遇到未安装python此类的Error，跳转此链接有解决方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E4%BF%AE%E6%94%B9-bash"><span class="toc-number">1.1.6.</span> <span class="toc-text">6、修改 bash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#petalinux%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">petalinux使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AE%BE%E7%BD%AE-Petalinux-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、设置 Petalinux 环境变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA-petalinux-%E5%B7%A5%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">2、创建 petalinux 工程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%BC%95%E5%85%A5HDL%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">3、引入HDL文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E8%BF%9B%E5%85%A5petalinux%E8%AE%BE%E7%BD%AE%E7%AA%97%E5%8F%A3"><span class="toc-number">1.3.2.</span> <span class="toc-text">4、进入petalinux设置窗口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E9%85%8D%E7%BD%AE-Linux-%E5%86%85%E6%A0%B8"><span class="toc-number">1.3.3.</span> <span class="toc-text">5、配置 Linux 内核</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E9%80%89%E6%8B%A9%E9%80%82%E5%90%88%E6%AD%A3%E5%9C%A8%E6%9E%84%E5%BB%BA%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-number">1.3.4.</span> <span class="toc-text">6、选择适合正在构建的项目的设备树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81%E7%BC%96%E8%AF%91%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.3.5.</span> <span class="toc-text">7、编译项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81%E5%90%AF%E5%8A%A8%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.3.6.</span> <span class="toc-text">8、启动平台</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Noah.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Xilinx学习笔记-01"/></a><div class="content"><a class="title" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01">Xilinx学习笔记-01</a><time datetime="2022-10-08T05:34:00.000Z" title="发表于 2022-10-08 13:34:00">2022-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：?</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>FPGA学习--02按键控制LED | Roxy Blog</title><meta name="keywords" content="FPGA"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="学习FPGA part.2 进入下一步，传统的点灯工程少不了  ​		首先先理清ZYNQ芯片的专用术语，   PS: 处理系统 （Processing System) , 就是与FPGA无关的ARM的SOC的部分。 PL: 可编程逻辑 (Progarmmable Logic), 就是FPGA部分。 APU: 应用处理器单元（Application Processor Unit).双ARM-Cort">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA学习--02按键控制LED">
+<meta property="og:url" content="http://blog.roxyblog.cn/2022/08/15/FPGA%E5%AD%A6%E4%B9%A0-02%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED/index.html">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="学习FPGA part.2 进入下一步，传统的点灯工程少不了  ​		首先先理清ZYNQ芯片的专用术语，   PS: 处理系统 （Processing System) , 就是与FPGA无关的ARM的SOC的部分。 PL: 可编程逻辑 (Progarmmable Logic), 就是FPGA部分。 APU: 应用处理器单元（Application Processor Unit).双ARM-Cort">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg">
+<meta property="article:published_time" content="2022-08-15T10:46:00.000Z">
+<meta property="article:modified_time" content="2023-03-02T05:14:55.474Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2022/08/15/FPGA%E5%AD%A6%E4%B9%A0-02%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'FPGA学习--02按键控制LED',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-02 13:14:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">FPGA学习--02按键控制LED</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-15T10:46:00.000Z" title="发表于 2022-08-15 18:46:00">2022-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-02T05:14:55.474Z" title="更新于 2023-03-02 13:14:55">2023-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/FPGA/">FPGA</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/FPGA/Zynq-SDK/">Zynq SDK</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="FPGA学习--02按键控制LED"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="学习FPGA-part-2"><a href="#学习FPGA-part-2" class="headerlink" title="学习FPGA part.2"></a>学习FPGA part.2</h1><blockquote>
+<p>进入下一步，传统的点灯工程少不了</p>
+</blockquote>
+<p>​		首先先理清ZYNQ芯片的专用术语，</p>
+<blockquote>
+<ul>
+<li><strong>PS: 处理系统 （Processing System) , 就是与FPGA无关的ARM的SOC的部分。</strong></li>
+<li><strong>PL: 可编程逻辑 (Progarmmable Logic), 就是FPGA部分。</strong></li>
+<li>APU: 应用处理器单元（Application Processor Unit).双ARM-CortexA9核，加上高速缓冲，DMA，定时器，中断控制，浮点和NEON协处理，硬件加速器一致性控制器。</li>
+<li>TTC:（Triple Time Counter）3个独立计数通道，挂在APB上，为系统或外设提供定时或计数服务。</li>
+<li>WDT：看门狗定时器</li>
+<li>SWDT：系统级看门狗定时器</li>
+<li>SCU： Snoop Control Unit, 用来保持双核之间的数据Cache的一致性。</li>
+<li>AXI ： 先进的可扩展接口（Advanced eXtensible Interface），是 Xilinx 从 6 系列的 FPGA 开始引入的一个接口协议，主要描述了主设备和从设备之间的数据传输方式。在 ZYNQ 中继续使用，版本是 AXI4，所以我们经常会看到 AXI4.0，ZYNQ 内部设备都有 AXI 接口。</li>
+</ul>
+</blockquote>
+<h1 id="按键控制LED实验"><a href="#按键控制LED实验" class="headerlink" title="按键控制LED实验"></a>按键控制LED实验</h1><p>​		ZYNQ 芯片的 GPIO 分为三种，分别是 MIO、EMIO 和 AXI_GPIO，其中 MIO是 PS 的专用 I&#x2F;O，作为普通输入输出或者外设驱动 I&#x2F;O 来使用，EMIO 是扩展的MIO，当 MIO 不够时，可以使用部分 PL 的 I&#x2F;O 做为 MIO 来使用，而 AXI_GPIO 是一个可以实现 GPIO 功能的 IP 核，PS 端可以通过 AXI 总线对其进行操作。在需要众多 I&#x2F;O 口的应用场合，AXI_GPIO 可以将所有可用引脚作为 I&#x2F;O 口使用。</p>
+<h2 id="基础知识介绍"><a href="#基础知识介绍" class="headerlink" title="基础知识介绍"></a>基础知识介绍</h2><p>​		在芯片的数据手册中我们可以看到芯片 GPIO 的组成，GPIO分为 4 个 Bank，其中 Bank0 有 32bit，Bank1 有 22bit 共 54bit 属于 MIO，Bank2和 Bank3 各有 32bit 属于可扩展的 EMIO，所以对于用户而言有最多 64 个 I&#x2F;O 可以使用。</p>
+<blockquote>
+<ul>
+<li>PS端的MIO共有54个GPIO可控，序号为0:53，这个很重要，之后EMIO作为MIO使用时，根据设置的引脚号从54开始计数</li>
+<li>PL端的EMIO有32个bit可控</li>
+<li>MIO 是最常用也是使用最多的应用，但是 ZYNQ 最多只有 54 个 MIO 可以使用，如果 MIO 不够怎么办？这个时候就需要用到 EMIO，EMIO 是对于 MIO 的扩展 I&#x2F;O，它是将 PL 端的部分 I&#x2F;O 作为 MIO 供 PS 使用。</li>
+</ul>
+</blockquote>
+<p>​		<strong>另外由于 AXI_GPIO 的使用方法有所不同，所以不在这里列出</strong></p>
+<p>​		MIO 是沟通 PS 内核和外设的桥梁，PS 所有的外设都可以通过 MIO 访问，也可以将外设与 MIO 连接，在使用上具有极大的灵活性，为项目硬件设计提供了许多便利，降低了电路板布局布线的难度。但是即使如此，在给不同外设分配引脚时也不是随心所欲的，必须遵循一定的规范。</p>
+<p><img src="/assets/images/1006/1.png" alt="芯片GPIO框图"></p>
+<h2 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h2><p>​		如下图示，可以看到许多外设能够分配的 I&#x2F;O 是有限制的，当你在创建 Vivado 工程进行硬件设计时，使能了某个外设时也就分配了该外设连接的引脚，不需要后续添加引脚束。像 QSPI、Ethernet0、Ethernet1 只能分配在固定引脚。所以在进行硬件设计时必须要考虑好引脚分配的问题，合理分配引脚，才能降低后续电路板绘制的难度。<br><img src="/assets/images/1006/2.png" alt="MIO 可分配功能"></p>
+<p>​		按照之前实验的步骤建立 Vivado 工程，命名为“mio_key_led”，工程创建完成后，按照之前的步骤创建 Block Design，添加 ZYNQ7 Processing System IP 核，双击 IP 核进入配置页面基本配置与之前相同，在此不再赘述，重点讲解本次实验需要配置的项目。在本次实验中，我们需要用到 MIO，所以在配置中使能 GPIO MIO</p>
+<p><img src="/assets/images/1006/3.png" alt="使能 MIO"></p>
+<p>​		配置完成后点击“OK”保存并返回。接下来参照之前实验的操作在 sources面 板 中 ， 右 键 选 择Design Sources下 的mio_key_led_wrapper中 的mio_key_led_i: mio_key_led，在弹出的菜单中选择 Generate Output Products…生成输出文件，然后在相同位置右键选择 Create HDL Wrapper…生成顶层 HDL 文件。由于本次实验不需要用到 PL 部分，所以不需要生成 Bitstream 文件，直接导出即可。<br>​		这样就完成了硬件方面的设计。</p>
+<h2 id="软件设计"><a href="#软件设计" class="headerlink" title="软件设计"></a>软件设计</h2><p>​		完成硬件设计并导出到 SDK 后，我们就可以开始进行软件方面的设计工作</p>
+<p>​		我们按照之前的步骤创建一个新的“hello world”工程，命名为“mio_key_led”创建好之后打开板级支持包 mio_key_led_bsp 下面的 system.mss 文件如图 2.3.2所示，在文件中可以看到本实验所用到的芯片上的所有资源，在这个文件下点击外设后面的“Docunmentation”可以打开关于该外设的数据手册，里面会详细描述该外设的功能，使用方法，库函数等信息，能有效帮助我们学会使用该外设，在项目开发过程中多阅读这些文档能加深我们我们的理解。除此之外，Xilinx 官方还提供了一些示例程序供使用者参考，点击外设后面的“Import Example”可以导入这些例程，这些例程都是该外设的基本应用，对于初学者是非常好的参考。</p>
+<p><img src="/assets/images/1006/4.png" alt="system.mss 文件"></p>
+<p><img src="/assets/images/1006/5.png" alt="gpio 数据手册"></p>
+<p>​		Xilinx 官方提供了功能详尽库函数，免去了用户在使用外设时查阅手册配置寄存器的烦恼，极大的提高了开发效率，降低了出<br>错的概率。相关库函数的文件保存在 mio_key_led_bsp 板级支持包下面 ps7_cortrxa9_0&gt; libsrc&gt; gpios_v3_4 &gt;src里面。</p>
+<p><img src="/assets/images/1006/6.png" alt="GPIO 库函数文件"></p>
+<p>​		在程序中我们需要做的事情就是 </p>
+<blockquote>
+<p>1、初始化 GPIO；</p>
+<p>2、配置 LED 接口为输出，KEY 接口为输入；</p>
+<p>3、LED 接口输出使能；</p>
+<p>4、读取 KEY 接口状态，根据 KEY 接口状态改变 LED 接口的高低电平输出。</p>
+</blockquote>
+<p>​		在明确了需要完成的任务之后，要做的事情就是查找相关的库函数，并确定要配置的参数等相关设置。</p>
+<p>​		实验代码为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;platform.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;xil_printf.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;xgpiops.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;xgpiops_hw.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MIOLED1 0	<span class="comment">//LED1 连接 至 MIO0</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MIOKEY1 9	<span class="comment">//KEY1 连接至 MIO9</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> input 	0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> output	1</span></span><br><span class="line"></span><br><span class="line">XGpioPs Gpios;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    init_platform();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> Status;</span><br><span class="line">    XGpioPs_Config *ConfigPtr;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化GPIO</span></span><br><span class="line">    print(<span class="string">&quot;MIO Text! \n\r&quot;</span>);</span><br><span class="line">    ConfigPtr = XGpioPs_LookupConfig(XPAR_XGPIOPS_0_DEVICE_ID);</span><br><span class="line">    Status = XGpioPs_CfgInitialize(&amp;Gpios,ConfigPtr,ConfigPtr-&gt;BaseAddr);</span><br><span class="line">    <span class="keyword">if</span>(Status != XST_SUCCESS)</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="keyword">return</span> XST_FAILURE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置LED接口方向为输出</span></span><br><span class="line">    XGpioPs_SetDirectionPin(&amp;Gpios,MIOLED1,output);</span><br><span class="line">    <span class="comment">//设置KEY接口方向为输入</span></span><br><span class="line">    XGpioPs_SetDirectionPin(&amp;Gpios ,MIOKEY1 ,input);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使能LED接口输出</span></span><br><span class="line">    XGpioPs_SetOutputEnablePin(&amp;Gpios ,MIOLED1 ,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="comment">//读取KEY状态，改变LED输出电平</span></span><br><span class="line">    	<span class="keyword">if</span>(XGpioPs_ReadPin(&amp;Gpios,MIOKEY1))</span><br><span class="line">    		&#123;XGpioPs_WritePin(&amp;Gpios ,MIOLED1 ,<span class="number">1</span>);&#125;</span><br><span class="line">    	<span class="keyword">else</span></span><br><span class="line">    		&#123;XGpioPs_WritePin(&amp;Gpios ,MIOLED1 ,<span class="number">0</span>);&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cleanup_platform();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​		该程序实现了按键控制 LED 的功能，按键按下 LED 点亮，按键松开 LED 熄灭。在上述代码中我们添加了一些注释描述了各函数的功能，所以不再进行详细讲解。</p>
+<p>​		程序修改完成后点击保存，软件自动编译生成可执行文件。至此软件设计完成。</p>
+<h2 id="下载验证"><a href="#下载验证" class="headerlink" title="下载验证"></a>下载验证</h2><p>​		完成硬件和软件的设计之后，我们就可以将程序烧录到开发板上进行验证。首先按照之前的方式连接串口，可以通过串口打印判断程序是否在运行。</p>
+<p>​		烧录完成后可以开发板上可以看到按下 PS_KEY1，PS_LED1 点亮，说明硬件设计和软件设计都是正确的。</p>
+<p><img src="/assets/images/1006/7.png" alt="实验现象"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2022/08/15/FPGA%E5%AD%A6%E4%B9%A0-02%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED/">http://blog.roxyblog.cn/2022/08/15/FPGA%E5%AD%A6%E4%B9%A0-02%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/FPGA/">FPGA</a></div><div class="post_share"><div class="social-share" data-image="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="../FPGA%E5%AD%A6%E4%B9%A0-03%E6%8C%89%E9%94%AE%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6LED/"><img class="prev-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/100412674_p0_master1200.webp" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">FPGA学习--03按键中断控制LED</div></div></a></div><div class="next-post pull-right"><a href="../../13/FPGA%E5%AD%A6%E4%B9%A0-01%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0Hello-World/"><img class="next-cover" src="https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">FPGA学习--01串口打印Hello World</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../FPGA%E5%AD%A6%E4%B9%A0-03%E6%8C%89%E9%94%AE%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6LED/" title="FPGA学习--03按键中断控制LED"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/100412674_p0_master1200.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-15</div><div class="title">FPGA学习--03按键中断控制LED</div></div></a></div><div><a href="../../13/FPGA%E5%AD%A6%E4%B9%A0-01%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0Hello-World/" title="FPGA学习--01串口打印Hello World"><img class="cover" src="https://s2.loli.net/2022/08/13/J9uZHKXNDkCTnM8.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-13</div><div class="title">FPGA学习--01串口打印Hello World</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0FPGA-part-2"><span class="toc-number">1.</span> <span class="toc-text">学习FPGA part.2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8C%89%E9%94%AE%E6%8E%A7%E5%88%B6LED%E5%AE%9E%E9%AA%8C"><span class="toc-number">2.</span> <span class="toc-text">按键控制LED实验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.1.</span> <span class="toc-text">基础知识介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.2.</span> <span class="toc-text">硬件设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.3.</span> <span class="toc-text">软件设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">2.4.</span> <span class="toc-text">下载验证</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Noah.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Xilinx学习笔记-01"/></a><div class="content"><a class="title" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01">Xilinx学习笔记-01</a><time datetime="2022-10-08T05:34:00.000Z" title="发表于 2022-10-08 13:34:00">2022-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/2354352.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：?</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

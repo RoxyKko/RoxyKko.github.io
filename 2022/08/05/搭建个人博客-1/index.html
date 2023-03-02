@@ -1,0 +1,494 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>搭建个人博客 | Roxy Blog</title><meta name="keywords" content="Blog"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="总述 “*** 记录下自己搭建博客的过程***”  简介​	起初想要搭建一个自己的博客是因为从实验室的学长们的博客学到了很多，从而萌生了搭建自己的博客，记录下自己的学习和经验。说来有趣的一点是，我个人将学长们的博客收藏起来的文件夹命名为“传承”，如同朱学长留下给我们的《仪器仪表指南》，毅子哥、阿宾学长等等学长自己费时写出的经验总结博客，也同样给予了我们这一代电赛实验室成员知识。 ​	是故，我也想像">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建个人博客">
+<meta property="og:url" content="http://blog.roxyblog.cn/2022/08/05/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/index.html">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="总述 “*** 记录下自己搭建博客的过程***”  简介​	起初想要搭建一个自己的博客是因为从实验室的学长们的博客学到了很多，从而萌生了搭建自己的博客，记录下自己的学习和经验。说来有趣的一点是，我个人将学长们的博客收藏起来的文件夹命名为“传承”，如同朱学长留下给我们的《仪器仪表指南》，毅子哥、阿宾学长等等学长自己费时写出的经验总结博客，也同样给予了我们这一代电赛实验室成员知识。 ​	是故，我也想像">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/08/05/aiTBgLmnG4ho5XQ.png">
+<meta property="article:published_time" content="2022-08-05T07:54:00.000Z">
+<meta property="article:modified_time" content="2022-08-15T18:14:00.307Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/05/aiTBgLmnG4ho5XQ.png"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2022/08/05/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '搭建个人博客',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-16 02:14:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2022/08/05/aiTBgLmnG4ho5XQ.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">搭建个人博客</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-05T07:54:00.000Z" title="发表于 2022-08-05 15:54:00">2022-08-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-15T18:14:00.307Z" title="更新于 2022-08-16 02:14:00">2022-08-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Blog/">Blog</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="搭建个人博客"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h1><blockquote>
+<p>“*** 记录下自己搭建博客的过程***”</p>
+</blockquote>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​	起初想要搭建一个自己的博客是因为从实验室的学长们的博客学到了很多，从而萌生了搭建自己的博客，记录下自己的学习和经验。说来有趣的一点是，我个人将学长们的博客收藏起来的文件夹命名为“传承”，如同朱学长留下给我们的《仪器仪表指南》，毅子哥、阿宾学长等等学长自己费时写出的经验总结博客，也同样给予了我们这一代电赛实验室成员知识。</p>
+<p>​	是故，我也想像前一届的学长们一样，写下博客，留下自己的经验，一是自查学习用，二是留给下一代的实验室成员。衷心祝愿我所崇拜的实验室的学长学姐们未来能有光明的前途。</p>
+<p>​	<del>其实原来是有自己的一个博客的，是520那天心血来潮搭建的，但是后续又没有写文章也没有做美化，故拖到了暑假后段比完电赛干脆推倒重来。鉴定为懒狗。</del></p>
+<p>​	曾经的博客界面</p>
+<p><img src="/assets/images/1001/1.png"></p>
+<p><img src="/assets/images/1001/2.png"></p>
+<h2 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h2><p>​	1、搭建博客工具下载</p>
+<p>​	2、使用hexo搭建博客</p>
+<p>​	3、将博客部署至云服务器</p>
+<h1 id="搭建博客"><a href="#搭建博客" class="headerlink" title="搭建博客"></a>搭建博客</h1><h2 id="前置要求"><a href="#前置要求" class="headerlink" title="前置要求"></a>前置要求</h2><blockquote>
+<p>​	需要自己去注册好<a target="_blank" rel="noopener" href="https://github.com/">github</a>账号，同时下载好<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/download/">node.js</a>和<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">git</a></p>
+<p>​	这是两个必要的工具，多提一嘴，Git的使用十分重要，之后需要自己摸索，学会Git使用是无论以后工作或是其他都是一个程序员所必备的重要技能。</p>
+</blockquote>
+<p>​	这是我所使用的版本，使用window10的cmd命令窗输入命令查看</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nongj&gt;git <span class="literal">--version</span></span><br><span class="line">git version <span class="number">2.35</span>.<span class="number">1</span>.windows.<span class="number">2</span></span><br><span class="line"></span><br><span class="line">C:\Users\nongj&gt;node <span class="literal">--version</span></span><br><span class="line">v16.<span class="number">16.0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="建立工作区文件夹"><a href="#建立工作区文件夹" class="headerlink" title="建立工作区文件夹"></a>建立工作区文件夹</h2><p>​	找一个地方建立博客工程文件夹，我是直接在E:\Blog，其中Blog文件夹就是我的代码工作区。</p>
+<p>​	进入Blog文件夹后，在文件管理器上面的对话框，键入cmd，回车即可打开命令窗口，如图示：</p>
+<p><img src="/assets/images/1001/3.png" alt="输入cmd"></p>
+<p><img src="/assets/images/1001/4.png" alt="cmd界面"></p>
+<p>​	这里就是在指定文件夹打开cmd的方法了</p>
+<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install <span class="literal">-g</span> hexo<span class="literal">-cli</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h2><p>​	先在Blog文件夹下再新建一个文件夹，正常都应该知道不要用中文名或含空格建了吧？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;文件夹名称&gt;	//新建的文件夹名字</span><br></pre></td></tr></table></figure>
+
+<p>​	下载完成后应该有这些文件</p>
+<p><img src="/assets/images/1001/5.png"></p>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>​	点击进入建立起的文件夹，在该文件夹目录下打开cmd</p>
+<p>​	或者在刚刚的cmd命令窗输入，命令窗指令前路径指向该文件夹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd &lt;文件夹名称&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​	这里我建立的文件夹名字叫new，在命令窗口输入<strong>hexo server</strong>启动本地服务器运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> E:\Blog&gt; cd new				//进入文件夹</span><br><span class="line"> E:\Blog\new&gt; hexo server		//启动本地服务器</span><br><span class="line"> </span><br><span class="line"> //输入上述指令后后命令窗口会变成：</span><br><span class="line">E:\Blog\new&gt; hexo server		//启动本地服务器</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/ . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+
+<p>​	其含义就是启动了本地服务器，在命令窗口按Ctrl+C停止，这个时候我们打开浏览器</p>
+<blockquote>
+<p><strong>浏览器输入<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a></strong></p>
+</blockquote>
+<p>​	此时显示的就是hexo默认的主题了</p>
+<p><img src="/assets/images/1001/6.png"></p>
+<blockquote>
+<p>*** 网上有很多其他hexo美化主题，可以自行查找使用***</p>
+</blockquote>
+<h1 id="使用butterfly主题"><a href="#使用butterfly主题" class="headerlink" title="使用butterfly主题"></a>使用butterfly主题</h1><blockquote>
+<p>​	官方的文档是<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a>，内容十分详细，b站也有很多相关教程，作者来自中国台湾，繁中教程并没有什么难以理解的，作者在右下角还贴心的设置了简繁切换按钮，只要用心去看其实并没有什么难以看懂的。</p>
+<p>​	butterfly是一个功能强大、扩展性强、兼具简洁与美观的主题，也有很多人在用，如何避免千篇一律创造出自己独一无二的博客，这需要自己努力学习搭建来得到，这里制作教学起到抛砖引玉的作用，希望能根据下面教程搭建出基本的框架，之后自行配合作者的文档进行美化。</p>
+</blockquote>
+<h2 id="安装butterfly"><a href="#安装butterfly" class="headerlink" title="安装butterfly"></a>安装butterfly</h2><p>​	在之前创建的文件夹内打开cmd窗口，之后我们将这个目录称之为Hexo 根目录，输入下述代码后，Hexo 根目录下的themes文件夹会新增一个butterfly文件夹，这就是butterfly主题的相关文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone <span class="literal">-b</span> master https://github.com/jerryc127/hexo<span class="literal">-theme-butterfly</span>.git themes/butterfly</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>推荐使用VS code</strong></p>
+</blockquote>
+<p>​	右键文件夹空白处，选择用VS code打开，选中**_config.yml**划到代码100行附近，改成如下所示，Ctrl+S保存，即换成butterfly主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Extensions</span><br><span class="line">## Plugins: https://hexo.io/plugins/</span><br><span class="line">## Themes: https://hexo.io/themes/</span><br><span class="line">theme: butterfly</span><br></pre></td></tr></table></figure>
+
+<p>​	再次打开cmd命令窗口，输入，如果一直跟着做下来，上面的服务器没关掉，先去那个命令窗口Ctrl+C关闭再输入下述指令重开服务器，之后每次更改文件保存后查看效果都要重启服务器，务必记住</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p><strong>浏览器输入<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a></strong></p>
+<p>细心的人就发现了，命令窗口显示的信息和默认的不一样，它显示成了：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">E:\Blog\new&gt; hexo server</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO</span><br><span class="line">  ===================================================================</span><br><span class="line"></span><br><span class="line">      <span class="comment">#####  #    # ##### ##### ###### #####  ###### #      #   #</span></span><br><span class="line">      <span class="comment">#    # #    #   #     #   #      #    # #      #       # #</span></span><br><span class="line">      <span class="comment">#####  #    #   #     #   #####  #    # #####  #        #</span></span><br><span class="line">      <span class="comment">#    # #    #   #     #   #      #####  #      #        #</span></span><br><span class="line">      <span class="comment">#    # #    #   #     #   #      #   #  #      #        #</span></span><br><span class="line">      <span class="comment">#####   ####    #     #   ###### #    # #      ######   #</span></span><br><span class="line"></span><br><span class="line">                            <span class="number">4.3</span>.<span class="number">1</span></span><br><span class="line">  ===================================================================</span><br><span class="line">INFO  <span class="built_in">Start</span> processing</span><br><span class="line">INFO  Hexo is running at http://localhost:<span class="number">4000</span>/ . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+
+<p>即在命令窗口用字符#拼成了butterfly的样式，这样就表示主题启动成功了，没有显示这个的检查是不是改了以后忘记按Ctrl+S保存了</p>
+<p>​	然后安装需要的插件，否则界面是打不开的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br></pre></td></tr></table></figure>
+
+<p>安装成功插件后，打开服务器，进入<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a>即可查看到butterfly的默认界面</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p><img src="/assets/images/1001/7.png"></p>
+<blockquote>
+<p>还有一件事，要去Hexo 根目录内的**_config.yml**第11行的language里把en改成zh-CN即简体中文，这几个的设置下面会详细讲述。</p>
+</blockquote>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="标签页和分类页"><a href="#标签页和分类页" class="headerlink" title="标签页和分类页"></a>标签页和分类页</h3><p>VS code选择Hexo 根目录下的\ source \ _posts内的hello-world.md并打开，在最开头的地方如下添加几个修改，以便看到标签页，分类页创建成功的效果，将原本的仅有第2行修改成如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">tags: </span><br><span class="line">    - tag1</span><br><span class="line">    - tag2</span><br><span class="line">categories:</span><br><span class="line">    - ccategorie1</span><br><span class="line">    - ccategorie2</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>​	再到Hexo 根目录执行以下命令，<strong>创建界面的命令为hexo new page &lt;页面名&gt;</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags				//命令</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">E:\Blog\new&gt; hexo new page tags	//命令执行成功时演示</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO</span><br><span class="line"></span><br><span class="line">      <span class="comment">#####  #    # ##### ##### ###### #####  ###### #      #   #</span></span><br><span class="line">      <span class="comment">#    # #    #   #     #   #      #    # #      #       # #</span></span><br><span class="line">      <span class="comment">#####  #    #   #     #   #####  #    # #####  #        #</span></span><br><span class="line">      <span class="comment">#    # #    #   #     #   #      #####  #      #        #</span></span><br><span class="line">      <span class="comment">#    # #    #   #     #   #      #   #  #      #        #</span></span><br><span class="line">      <span class="comment">#####   ####    #     #   ###### #    # #      ######   #</span></span><br><span class="line"></span><br><span class="line">                            <span class="number">4.3</span>.<span class="number">1</span></span><br><span class="line">  ===================================================================</span><br><span class="line">INFO  Created: E:\Blog\new\source\tags\index.md</span><br></pre></td></tr></table></figure>
+
+<p>这样就在Hexo根目录下的	~ \ source \ tages &lt;—此为新增文件夹&gt; 新建了tages文件夹，即标签文件夹，文件夹内部会有唯一一个index.md文件，打开，并修改至如下样式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 标签							//这里是名称，我们改用中文显示</span><br><span class="line">date: 2022-08-05 19:47:05			 //创建的日期	</span><br><span class="line">type: &quot;tags&quot;						 //设置类型</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>  保存所有修改，再次打开服务器，浏览器输入：<a target="_blank" rel="noopener" href="http://localhost:4000/tags/">http://localhost:4000/tags/</a>可以看到创建了以下界面</p>
+<p><img src="/assets/images/1001/8.png"></p>
+<p>​	同理，键入以下创建分类页面</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+
+<p>修改创建的categories文件夹下的index.md</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line">date: 2022-08-05 20:15:28</span><br><span class="line">type: categories</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>接下来基本不会插入示例图片，自己去试</p>
+</blockquote>
+<p>​	输入<a target="_blank" rel="noopener" href="http://localhost:4000/categories/">http://localhost:4000/categories/</a>查看是否成功</p>
+<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p>​	创建页面</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page link</span><br></pre></td></tr></table></figure>
+
+<p>​	修改type为link</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 友情链接</span><br><span class="line">date: 2022-08-05 20:20:31</span><br><span class="line">type: link</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>​	在source下创建文件夹_data，文件夹内再创建link.yml文件，复制下面的内容并修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">- class_name: 友情链接</span><br><span class="line">  class_desc: 那些人，那些事</span><br><span class="line">  link_list:</span><br><span class="line">    - name: Hexo</span><br><span class="line">      link: https://hexo.io/zh-tw/</span><br><span class="line">      avatar: https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg</span><br><span class="line">      descr: 快速、简单且强大的网誌框架</span><br><span class="line"></span><br><span class="line">- class_name: 网站</span><br><span class="line">  class_desc: 值得推荐的网站</span><br><span class="line">  link_list:</span><br><span class="line">    - name: Youtube</span><br><span class="line">      link: https://www.youtube.com/</span><br><span class="line">      avatar: https://i.loli.net/2020/05/14/9ZkGg8v3azHJfM1.png</span><br><span class="line">      descr: 视频网站</span><br><span class="line">    - name: Weibo</span><br><span class="line">      link: https://www.weibo.com/</span><br><span class="line">      avatar: https://i.loli.net/2020/05/14/TLJBum386vcnI1P.png</span><br><span class="line">      descr: 中国最大社交分享平台</span><br><span class="line">    - name: Twitter</span><br><span class="line">      link: https://twitter.com/</span><br><span class="line">      avatar: https://i.loli.net/2020/05/14/5VyHPQqR6LWF39a.png</span><br><span class="line">      descr: 社交分享平台</span><br></pre></td></tr></table></figure>
+
+<p>新增自己的友链就自己新增，如我的信息是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- name: Roxy</span><br><span class="line">  link: https://roxykko.github.io/</span><br><span class="line">  avatar: https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg</span><br><span class="line">  descr: 学无止境</span><br></pre></td></tr></table></figure>
+
+<h3 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h3><p>介绍自己的一个界面，用同样的方法创建一个名为about的页面</p>
+<p>修改index.md即可，这里附上我自己的页面，可在此基础上修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 关于我</span><br><span class="line">date: 2022-08-04 23:08:12</span><br><span class="line">comments: false</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">#### 个人简介</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">&gt;&quot;***愿朱颜不改常依旧，花中消遣，酒内忘忧。***&quot;</span><br><span class="line">&gt;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">个人信息:</span><br><span class="line"></span><br><span class="line">双非一本学生。</span><br><span class="line">博客用作学习自查，记录累计经验用。</span><br><span class="line">喜好FPS类游戏，有一群很好的损友</span><br><span class="line">YYR、YWL、DRM、Amao、Winter......</span><br><span class="line"></span><br><span class="line">#### 博客信息</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">+ 网站搭建于：2022年8月4日23:31:00</span><br><span class="line">+ 使用hexo搭建</span><br><span class="line"></span><br><span class="line">***更新日志：***</span><br><span class="line">--*2022年8月4日：建立起博客，开始记录学习内容*</span><br><span class="line"></span><br><span class="line">&lt;br&gt;</span><br><span class="line"></span><br><span class="line">#### 计划</span><br><span class="line"></span><br><span class="line">**2022计划**</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">&gt;**2022-GOALS**</span><br><span class="line">&gt;</span><br><span class="line">&gt;+ [ ]学习PYQT5</span><br><span class="line">&gt;+ [ ]学习使用Cube+CubeIDE复刻安富莱示波器项目</span><br><span class="line">&gt;+ [ ]英语过四级</span><br><span class="line">&gt;+ [ ]赚点小钱</span><br><span class="line">&gt;+ [ ]学会JAVA、JS</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>浏览器输入：<a target="_blank" rel="noopener" href="http://localhost:4000/about/">http://localhost:4000/about/</a> 查看效果</p>
+<h3 id="留言板"><a href="#留言板" class="headerlink" title="留言板"></a>留言板</h3><p>用同样的方法创建一个名为messageboard的页面</p>
+<p>修改生成的index.md</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 留言板</span><br><span class="line">date: 2022-08-04 23:38:42</span><br><span class="line">comments: true</span><br><span class="line">---</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个暂时看不到效果，得等到配置好评论功能后</p>
+</blockquote>
+<h3 id="网站信息"><a href="#网站信息" class="headerlink" title="网站信息"></a>网站信息</h3><p>​	修改Hexo根目录主配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: Roxy Blog				#博客名称</span><br><span class="line">subtitle: &#x27;subtitle&#x27;			#副标题</span><br><span class="line">description: &#x27;学无止境&#x27;			 #个人签名</span><br><span class="line">keywords:						#关键词</span><br><span class="line">author: Roxy					#作者名</span><br><span class="line">language: zh-CN					#语言设置</span><br><span class="line">timezone: &#x27;&#x27;					#时区设置</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="导航条"><a href="#导航条" class="headerlink" title="导航条"></a>导航条</h3><p>​	前面也注意到了，每次都要输入网址才能进入特定的页的话很麻烦，那有没有像我们正常使用网页那样的点击跳转呢？有的，导航条就是一个方法。</p>
+<p>​	上面创建了这么多页面，就让他显示在导航条。</p>
+<blockquote>
+<p>接下来是比较重要的一个内容，首先先进到\ themes \ butterfly 里面，选择里面的_config.yml，Ctrl + A全选，Ctrl + C 复制里面的所有内容，再按Ctrl + &#x2F; 全部注释了，回到Hexo根目录，新建一个 _config.butterfly.yml 再将前面复制的内容 Ctrl + V 粘贴，这样的目的是我们在主题文件保留了一个可作为参照的纯净副本，同时每次我们修改设置不需要点开两个目录，直接在根目录里面修改这个文件即可。</p>
+</blockquote>
+<p>​	之后我们将根目录下 _config.yml 称为<strong>主配置文件</strong></p>
+<p>​	_config.butterfly.yml 则称为<strong>主题配置文件</strong></p>
+<p>打开<strong>主题配置文件</strong>修改至这样，选中被注释的地方，按一下Ctrl + &#x2F;解除注释，保存即可，前面的英文可以改成中文，这样显示才会显示中文，顺序就是从上到下排列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  主页: / || fas fa-home</span><br><span class="line">  归档: /archives/ || fas fa-archive</span><br><span class="line">  标签: /tags/ || fas fa-tags</span><br><span class="line">  分类: /categories/ || fas fa-folder-open</span><br><span class="line">  留言板||fas fa-list:</span><br><span class="line">    #Music: /music/ || fas fa-music			#我又没写这两个，所以留着干嘛</span><br><span class="line">    #Movie: /movies/ || fas fa-video		#直接保留注释了</span><br><span class="line">  友情链接: /link/ || fas fa-link</span><br><span class="line">  关于: /about/ || fas fa-heart</span><br></pre></td></tr></table></figure>
+
+<p>开启服务器后在主页或是其他页面均可见导航条</p>
+<h3 id="社交图标"><a href="#社交图标" class="headerlink" title="社交图标"></a>社交图标</h3><p>​	需要博客连接到你的其他社交媒体，默认的是只有两个，github和邮箱</p>
+<blockquote>
+<p>其他的社交媒体连接和图标现没做，可以参考<a target="_blank" rel="noopener" href="https://butterfly.js.org/posts/4aa8abbe/#%E7%A4%BE%E4%BA%A4%E5%9C%96%E6%A8%99">官方文档</a></p>
+</blockquote>
+<p>​	进入主题配置文件，Ctrl + F 搜索，输入social，找到如下位置，解除注释并修改成自己的个人信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">social:</span><br><span class="line">  fab fa-github: https://github.com/xxxxx || Github</span><br><span class="line">  fas fa-envelope: mailto:xxxxxx@gmail.com || Email</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ICON设置"><a href="#ICON设置" class="headerlink" title="ICON设置"></a>ICON设置</h3><p>前面社交图标和导航条的图标都可以修改，博客官方教程有提供<a target="_blank" rel="noopener" href="https://butterfly.js.org/posts/4073eda/#Icon">阿里巴巴矢量库的方法</a></p>
+<h3 id="头像设置"><a href="#头像设置" class="headerlink" title="头像设置"></a>头像设置</h3><blockquote>
+<p>头像，以及博客主页图片、背景图片、页脚图片、文章封面、文章插图，都需要有一个图床来提供图片，这里提供的方法是PicGo + SM.MS制作图床，该方法是免费的，并且对我来说也暂时够用，其他方法还有PicGo 配合腾讯云COS、阿里云OSS等等，有兴趣可以自行了解，这里仅介绍PicGo + SM.MS制作图床的方法。</p>
+</blockquote>
+<p>​	首先，需要下载关键的软件<a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo/releases/tag/v2.3.0-beta.0">PicGo</a></p>
+<p><img src="/assets/images/1001/9.png"></p>
+<p>​	安装好后打开SM.MS网站获取API Token，自行注册一个账号。</p>
+<blockquote>
+<p>登陆后选择这个进入个人页面</p>
+</blockquote>
+<p><img src="/assets/images/1001/10.png"></p>
+<blockquote>
+<p>选择复制，没有就点生成再复制</p>
+</blockquote>
+<p><img src="/assets/images/1001/11.png"></p>
+<blockquote>
+<p>打开PicGo图床设置，选择SM.MS，填入API</p>
+</blockquote>
+<p>​	绑定完成后就是上传图片，选择上传区，把想要使用的图片拖入其中，SM.MS是给永久的5G空间，但一次不能上传超过5MB的图片，上传完毕后，在相册里就能看到你所上传的图片，点图片下方的第二个按钮，将弹出的连接复制即可。不嫌麻烦的话，点第一个也可以，然后把其他给删除仅留下网络连接，其实对于写博客文章插图来说，第一个按钮复制是最实用的，可以粘贴了直接用，但是这里是设置头像，只需要一个网络连接即可，不需要其他的格式。</p>
+<p>​	进入主题配置文件，Ctrl + F 搜索 avatar 即头像设置，在img一栏，将后面的网络连接用你上传的图片覆盖掉，保存重开服务器，即可看到头像更新。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Avatar (頭像)</span><br><span class="line">avatar:</span><br><span class="line">  img: https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg	#这是我的头像图片</span><br><span class="line">  effect: false</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="页脚"><a href="#页脚" class="headerlink" title="页脚"></a>页脚</h3><p>​	网站当然是都要备案的，只是我还没购买自己域名，尚未备案，只是挂在github上的个人博客，有米了自然就去搞个自己域名备案啦，有备案号了我就补上</p>
+<p>​	Ctrl + F 搜索 footer，如下修改，下面留言那一栏里的网址自己改成自己留言板的对应网址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Footer Settings</span><br><span class="line"># --------------------------------------</span><br><span class="line">footer:</span><br><span class="line">  owner:</span><br><span class="line">    enable: true</span><br><span class="line">    since: 2020</span><br><span class="line">  custom_text: ©版权说明：本网站所有内容均收集于互联网或自己创作,&lt;br&gt;方便于网友与自己学习交流，如有侵权，请&lt;a href = &#x27;https://roxykko.github.io/messageboard/&#x27;&gt;留言&lt;/a&gt;，立即处理&lt;br&gt;&lt;a href=&quot;https://beian.miit.gov.cn/&quot;&gt;&lt;span&gt;备案号：?&lt;/span&gt;&lt;/a&gt;</span><br><span class="line">  copyright: false # Copyright of theme and framework</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="评论区"><a href="#评论区" class="headerlink" title="评论区"></a>评论区</h3><p>​	前面留言面板的后续，搞完这里的设置即可使用评论区，这里使用Valine</p>
+<p>​	<a target="_blank" rel="noopener" href="https://valine.js.org/">https://valine.js.org/</a></p>
+<p>​	进入网址后看快速开启，一直跟着做直到得到APP ID 和 APP KEY</p>
+<p>​	得到后在主题配置文件内搜索valine，填上自己的appID和appKey</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># valine</span><br><span class="line"># https://valine.js.org</span><br><span class="line">valine:</span><br><span class="line">  appId: nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz</span><br><span class="line">  appKey: 8L52XkDfas8PNIFBJYD3oHUj</span><br><span class="line">  avatar: retro # gravatar style https://valine.js.org/#/avatar</span><br><span class="line">  serverURLs: # This configuration is suitable for domestic custom domain name users, overseas version will be automatically detected (no need to manually fill in)</span><br><span class="line">  bg: # valine background</span><br><span class="line">  visitor: false</span><br><span class="line">  option:</span><br></pre></td></tr></table></figure>
+
+<p>同时还要在comment选项里面选择valine</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">comments:</span><br><span class="line">  # Up to two comments system, the first will be shown as default</span><br><span class="line">  # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42</span><br><span class="line">  use: Valine # Valine,Disqus		#这里，改成Valine</span><br><span class="line">  text: true # Display the comment name next to the button</span><br><span class="line">  # lazyload: The comment system will be load when comment element enters the browser&#x27;s viewport.</span><br><span class="line">  # If you set it to true, the comment count will be invalid</span><br><span class="line">  lazyload: false</span><br><span class="line">  count: false # Display comment count in post&#x27;s top_img</span><br><span class="line">  card_post_count: false # Display comment count in Home Page</span><br></pre></td></tr></table></figure>
+
+<p>此时评论区即可用</p>
+<p><img src="/assets/images/1001/12.png"></p>
+<h3 id="网站图片和页脚"><a href="#网站图片和页脚" class="headerlink" title="网站图片和页脚"></a>网站图片和页脚</h3><p>​	搜索default_top_img，在里面填上你的图片链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># If the banner of page not setting, it will show the top_img</span><br><span class="line">default_top_img: https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg</span><br></pre></td></tr></table></figure>
+
+<p>​	再找到footer_bg,将false改成true</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Footer Background</span><br><span class="line">footer_bg: true</span><br></pre></td></tr></table></figure>
+
+<p>​	自己重新启动看看效果吧</p>
+<h2 id="更多美化"><a href="#更多美化" class="headerlink" title="更多美化"></a>更多美化</h2><p>​	挖个坑，以后再把自己美化的方法写下来，真的推荐多读读主题的官方文档，自行搭建出自己独一无二的博客</p>
+<h1 id="撰写文章"><a href="#撰写文章" class="headerlink" title="撰写文章"></a>撰写文章</h1><p>​	推荐使用插件hexo-admin</p>
+<p>​	在Hexo 根目录安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-admin</span><br></pre></td></tr></table></figure>
+
+<p>​	安装后启动hexo server</p>
+<p>​	浏览器输入<a target="_blank" rel="noopener" href="http://localhost:4000/admin/#/">http://localhost:4000/admin/#/</a>来进入管理页面，选择Post撰写文章，点击new post输入文字名开始撰写，写完后点击Publish。更改的话选择更改的文章，改完点右上角更新即可。</p>
+<p>​	推荐的方法是在Typora写好直接复制粘贴过来，然后在齿轮按钮更改设置，更改Tags标签和分类，可多填，然后发布即可。</p>
+<h1 id="部署到Github上"><a href="#部署到Github上" class="headerlink" title="部署到Github上"></a>部署到Github上</h1><p>​	首先进入Github主页新建一个库</p>
+<p><img src="/assets/images/1001/13.png"></p>
+<p>​	库名称是&lt;自己的Github名字&gt;.github.io 这里是我已经建过了，所以已存在，选公开就好</p>
+<p><img src="/assets/images/1001/14.png"></p>
+<p>​	建好以后首先将本地的git与Github连接，可以看以下<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2ab04cea6a28">教程</a>自行连接，已连接好就可以进入下一步</p>
+<p>​	进入<strong>主配置文件</strong>，划到最下面，也就是104行左右，在下面用户名改成自己的，保存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/one-command-deployment</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;用户名&gt;/&lt;用户名&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>​	在Hexo 根目录，打开cmd命令窗口，输入以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+
+<p>​	去到刚刚创建的仓库查看，出现许多文件即上传成功，他人即可通过&lt;用户名&gt;.github.io网站访问你的博客了，因为github是外网，国内不挂梯子可能加载较慢，听说以前有通过挂载在gitee上的，但是那玩意最近开始要审核了，所以估计已经不行了。</p>
+<p>​	果然还是有个自己的备案域名好啊。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2022/08/05/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/">http://blog.roxyblog.cn/2022/08/05/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/Blog/">Blog</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2022/08/05/aiTBgLmnG4ho5XQ.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="../../08/%E5%AD%A6%E4%B9%A0%E4%BD%BF%E7%94%A8FreeRTOS%E7%B3%BB%E7%BB%9F/"><img class="prev-cover" src="https://s2.loli.net/2022/08/08/YIxrAof6KdzJiPs.png" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">学习使用FreeRTOS系统</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">总述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">主要流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">2.</span> <span class="toc-text">搭建博客</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E8%A6%81%E6%B1%82"><span class="toc-number">2.1.</span> <span class="toc-text">前置要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%B7%A5%E4%BD%9C%E5%8C%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">2.2.</span> <span class="toc-text">建立工作区文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="toc-number">2.3.</span> <span class="toc-text">安装hexo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95"><span class="toc-number">2.4.</span> <span class="toc-text">创建目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-number">2.5.</span> <span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8butterfly%E4%B8%BB%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">使用butterfly主题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85butterfly"><span class="toc-number">3.1.</span> <span class="toc-text">安装butterfly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%92%8C%E5%88%86%E7%B1%BB%E9%A1%B5"><span class="toc-number">3.2.1.</span> <span class="toc-text">标签页和分类页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">友情链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%88%91"><span class="toc-number">3.2.3.</span> <span class="toc-text">关于我</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%95%99%E8%A8%80%E6%9D%BF"><span class="toc-number">3.2.4.</span> <span class="toc-text">留言板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E4%BF%A1%E6%81%AF"><span class="toc-number">3.2.5.</span> <span class="toc-text">网站信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%88%AA%E6%9D%A1"><span class="toc-number">3.2.6.</span> <span class="toc-text">导航条</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BE%E4%BA%A4%E5%9B%BE%E6%A0%87"><span class="toc-number">3.2.7.</span> <span class="toc-text">社交图标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ICON%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.2.8.</span> <span class="toc-text">ICON设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B4%E5%83%8F%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.2.9.</span> <span class="toc-text">头像设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E8%84%9A"><span class="toc-number">3.2.10.</span> <span class="toc-text">页脚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E8%AE%BA%E5%8C%BA"><span class="toc-number">3.2.11.</span> <span class="toc-text">评论区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E5%9B%BE%E7%89%87%E5%92%8C%E9%A1%B5%E8%84%9A"><span class="toc-number">3.2.12.</span> <span class="toc-text">网站图片和页脚</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E7%BE%8E%E5%8C%96"><span class="toc-number">3.3.</span> <span class="toc-text">更多美化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%92%B0%E5%86%99%E6%96%87%E7%AB%A0"><span class="toc-number">4.</span> <span class="toc-text">撰写文章</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0Github%E4%B8%8A"><span class="toc-number">5.</span> <span class="toc-text">部署到Github上</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Noah.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Xilinx学习笔记-01"/></a><div class="content"><a class="title" href="../2022/10/08/Xilinx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-01/" title="Xilinx学习笔记-01">Xilinx学习笔记-01</a><time datetime="2022-10-08T05:34:00.000Z" title="发表于 2022-10-08 13:34:00">2022-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://s2.loli.net/2022/08/05/aiTBgLmnG4ho5XQ.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：?</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
