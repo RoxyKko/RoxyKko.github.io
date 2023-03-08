@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Linux APUE学习：1、文件I/O操作 | Roxy Blog</title><meta name="keywords" content="Linux,APUE"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Linux APUE学习：1、文件I&#x2F;O操作文件源代码：https:&#x2F;&#x2F;github.com&#x2F;RoxyKko&#x2F;APUE.git  文件描述符stdout.c1234567891011121314151617#include &lt;stdio.h&gt;#include &lt;unistd.h&gt;#include &lt;string.h&gt;#define MSG_STR &amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux APUE学习：1、文件I&#x2F;O操作">
+<meta property="og:url" content="http://blog.roxyblog.cn/2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="Linux APUE学习：1、文件I&#x2F;O操作文件源代码：https:&#x2F;&#x2F;github.com&#x2F;RoxyKko&#x2F;APUE.git  文件描述符stdout.c1234567891011121314151617#include &lt;stdio.h&gt;#include &lt;unistd.h&gt;#include &lt;string.h&gt;#define MSG_STR &amp;q">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg">
+<meta property="article:published_time" content="2023-03-08T13:44:00.000Z">
+<meta property="article:modified_time" content="2023-03-08T13:57:51.669Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="APUE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux APUE学习：1、文件I/O操作',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-08 21:57:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="../categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="../index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="../archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="../tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="../categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="../messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="../link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="../aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="../index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="../index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="../archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="../tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="../categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="../messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="../link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="../aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Linux APUE学习：1、文件I/O操作</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-08T13:44:00.000Z" title="发表于 2023-03-08 21:44:00">2023-03-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-08T13:57:51.669Z" title="更新于 2023-03-08 21:57:51">2023-03-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux APUE学习：1、文件I/O操作"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Linux-APUE学习：1、文件I-x2F-O操作"><a href="#Linux-APUE学习：1、文件I-x2F-O操作" class="headerlink" title="Linux APUE学习：1、文件I&#x2F;O操作"></a>Linux APUE学习：1、文件I&#x2F;O操作</h1><p>文件源代码：<a target="_blank" rel="noopener" href="https://github.com/RoxyKko/APUE.git">https://github.com/RoxyKko/APUE.git</a></p>
+<p><img src="./%E5%87%8C%E4%BA%9120230225%E5%AD%A6%E4%B9%A0%E5%91%A8%E6%8A%A5.assets/image-20230308215731466.png" alt="image-20230308215731466"></p>
+<h3 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h3><h4 id="stdout-c"><a href="#stdout-c" class="headerlink" title="stdout.c"></a>stdout.c</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MSG_STR <span class="string">&quot;Hello World\n&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> main, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>, MSG_STR);</span><br><span class="line">	<span class="comment">// fputs 写入什么 写入到哪</span></span><br><span class="line">	<span class="built_in">fputs</span>(MSG_STR, <span class="built_in">stdout</span>);</span><br><span class="line">	<span class="comment">// write 写入（在哪写入， 写入什么， 写入多少）</span></span><br><span class="line">	write(STDOUT_FILENO, MSG_STR, <span class="built_in">strlen</span>(MSG_STR));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\allProject\Markdown\凌云周报\凌云20230225学习周报.assets\image-20230225211326219.png" alt="image-20230225211326219"></p>
+<h3 id="文件I-x2F-O操作"><a href="#文件I-x2F-O操作" class="headerlink" title="文件I&#x2F;O操作"></a>文件I&#x2F;O操作</h3><h4 id="file-io-c"><a href="#file-io-c" class="headerlink" title="file_io.c"></a>file_io.c</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="comment">// write 和 read close都在 unistd.h下</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">// memset的头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUFSIZE 1024</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MSG_STR <span class="string">&quot;Hello World\n&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 文件句柄，正常应该为非负的整数</span></span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="comment">// 返回值return value</span></span><br><span class="line">    <span class="type">int</span> rv = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">char</span> buf[BUFSIZE];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// open返回一个文件描述符保存在fd中</span></span><br><span class="line">    fd = open(<span class="string">&quot;test.txt&quot;</span>, O_RDWR|O_CREAT|O_TRUNC, <span class="number">0666</span>);</span><br><span class="line">    <span class="keyword">if</span>(fd &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* perror()函数可以打印系统调用出错的具体原因,其参数只能跟一个字符串提示符 */</span>        </span><br><span class="line">        perror(<span class="string">&quot;Open/Create file test.txt failure&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Open file returned file descriptor [%d]\n&quot;</span>, fd);</span><br><span class="line">    <span class="comment">// write参数 写到哪里 写什么 写的大小</span></span><br><span class="line">    <span class="comment">// 用strlen是因为MSG_STR是宏定义，宏定义是地址</span></span><br><span class="line">    <span class="keyword">if</span>( (rv=write(fd, MSG_STR, <span class="built_in">strlen</span>(MSG_STR))) &lt; <span class="number">0</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Write %d bytes into failure: %s\n&quot;</span>, rv, strerror(errno));</span><br><span class="line">        <span class="comment">// 疑问？：与其使用goto为什么不封装直接一个函数close和return呢</span></span><br><span class="line">        <span class="keyword">goto</span> cleanup;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    程序中定义的buf是局部变量存放在栈中，而栈中的数据是随机数据，所以这里会显示两个乱码字符。</span></span><br><span class="line"><span class="comment">    所以在使用局部变量之前，我们都应该对其进行初始化。</span></span><br><span class="line"><span class="comment">    */</span> </span><br><span class="line">    <span class="comment">// 初始化数组，在读数组前要先memset清空数组</span></span><br><span class="line">    <span class="comment">/******************!!!只要是栈中的数据都应该初始化!!!****************************/</span></span><br><span class="line">    lseek(fd, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">    <span class="comment">// close(fd);</span></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="comment">// read的返回值是你实际读取了多少字节</span></span><br><span class="line">    <span class="keyword">if</span>( (rv=read(fd, buf, <span class="keyword">sizeof</span>(buf))) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Read data from file failure : %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="keyword">goto</span> cleanup;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 疑问？：rv的值一直是0，但test.txt里是有成功写入的，为什么？</span></span><br><span class="line">    <span class="comment">// 解决：在Hello World写入后，文件偏移量（类似光标）位于World的后方，读或写入时从光标所在位置开始读写</span></span><br><span class="line">    <span class="comment">//      所以是读不到值的，解决方法是写入后先close文件再读或者使用leeek(fd, 0, SEEK_SET)，两种方法都将文件偏移量设置到文件开始的第一个字节上</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Read %d bytes data from file: %s\n&quot;</span>, rv, buf);</span><br><span class="line"></span><br><span class="line">    cleanup:</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="comment">// 非main函数return只会导致函数退出</span></span><br><span class="line">        <span class="comment">// 而main函数的return会调用exit()，导致整个进程中止</span></span><br><span class="line">        <span class="comment">// 同理，其他非main函数调用exit()一样会导致整个进程中止</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\allProject\Markdown\凌云周报\凌云20230225学习周报.assets\image-20230225211345083.png" alt="image-20230225211345083"></p>
+<p><img src="D:\allProject\Markdown\凌云周报\凌云20230225学习周报.assets\image-20230225215855084.png" alt="image-20230225215855084"></p>
+<h3 id="dup-和-dup2-系统调用"><a href="#dup-和-dup2-系统调用" class="headerlink" title="dup() 和 dup2()系统调用"></a>dup() 和 dup2()系统调用</h3><p>常用在标准输入、标准输出、标准出错重定向。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    fd = open(<span class="string">&quot;std.txt&quot;</span>, O_RDWR|O_CREAT|O_TRUNC, <span class="number">0666</span>);</span><br><span class="line">    <span class="keyword">if</span>(fd &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Open file failure: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// close(0);</span></span><br><span class="line">    <span class="comment">// close(1);</span></span><br><span class="line">    <span class="comment">// close(2);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// dup(fd);    //0 标准输入</span></span><br><span class="line">    <span class="comment">// dup(fd);    //1 标准输出</span></span><br><span class="line">    <span class="comment">// dup(fd);    //2 标准错误输出</span></span><br><span class="line"></span><br><span class="line">    dup2(fd, STDIN_FILENO);     <span class="comment">// 标准输入重定向到fd</span></span><br><span class="line">    dup2(fd, STDOUT_FILENO);    <span class="comment">// 标准输出重定向到fd</span></span><br><span class="line">    dup2(fd, STDERR_FILENO);    <span class="comment">// 标准错误输出重定向到fd</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;fd = %d\n&quot;</span>, fd);</span><br><span class="line"></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="D:\allProject\Markdown\凌云周报\凌云20230225学习周报.assets\image-20230225231153462.png" alt="image-20230225231153462"></p>
+<p><img src="D:\allProject\Markdown\凌云周报\凌云20230225学习周报.assets\image-20230225231230101.png" alt="image-20230225231230101"></p>
+<h3 id="stat-和fstat-系统调用"><a href="#stat-和fstat-系统调用" class="headerlink" title="stat()和fstat()系统调用"></a>stat()和fstat()系统调用</h3><p>stat()可以直接使用，fstat()要先open()后使用，两者都是系统调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>      <span class="comment">//open()函数</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span>     <span class="comment">// malloc()</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// struct stat stbuff;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> *<span class="title">stbuff</span>;</span></span><br><span class="line">    <span class="comment">// 指针一定要指向一个合法的内存地址，否则会出现段错误</span></span><br><span class="line">    stbuff = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> stat));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// stat(&quot;stat.c&quot;, &amp;stbuff);</span></span><br><span class="line">    stat(<span class="string">&quot;stat.c&quot;</span>, stbuff);</span><br><span class="line">    <span class="comment">// fstat 用法</span></span><br><span class="line">    <span class="comment">// int fd = -1;</span></span><br><span class="line">    <span class="comment">// fd = open(&quot;stat.c&quot;, O_RDONLY);</span></span><br><span class="line">    <span class="comment">// fstat(fd, stbuff);</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;File Mode: %o Real Size: %luB, Space Size: %luB\n&quot;</span>, stbuff-&gt;st_mode, stbuff-&gt;st_size, stbuff-&gt;st_blksize);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\allProject\Markdown\凌云周报\凌云20230225学习周报.assets\image-20230225234807364.png" alt="image-20230225234807364"></p>
+<h3 id="access-系统调用"><a href="#access-系统调用" class="headerlink" title="access()系统调用"></a>access()系统调用</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 改成可执行文件看看结果</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TEST_FILE <span class="string">&quot;access&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 测试文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span>(access(TEST_FILE, F_OK) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;File %s not exist!\n&quot;</span>, TEST_FILE);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;File %s exist!\n&quot;</span>, TEST_FILE);</span><br><span class="line">	<span class="comment">// 测试读许可权</span></span><br><span class="line">    <span class="keyword">if</span>(access(TEST_FILE, R_OK) == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;READ OK\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 测试写许可权</span></span><br><span class="line">    <span class="keyword">if</span>(access(TEST_FILE, W_OK) == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;WRITE OK\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 测试执行许可权</span></span><br><span class="line">    <span class="keyword">if</span>(access(TEST_FILE, X_OK) == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;EXECUTE OK\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/">http://blog.roxyblog.cn/2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/Linux/">Linux</a><a class="post-meta__tags" href="../../../../tags/APUE/">APUE</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="../../02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/"><img class="next-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用VSCode远程Remote SSH链接</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../../02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">ZCU102镜像配置和使用</div></div></a></div><div><a href="../../../../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-07</div><div class="title">ZCU102+ADRV9009使用GNU Radio开发使用</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="../categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-x2F-O%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">Linux APUE学习：1、文件I&#x2F;O操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-number">1.0.1.</span> <span class="toc-text">文件描述符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#stdout-c"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">stdout.c</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6I-x2F-O%E6%93%8D%E4%BD%9C"><span class="toc-number">1.0.2.</span> <span class="toc-text">文件I&#x2F;O操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#file-io-c"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">file_io.c</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dup-%E5%92%8C-dup2-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-number">1.0.3.</span> <span class="toc-text">dup() 和 dup2()系统调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stat-%E5%92%8Cfstat-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-number">1.0.4.</span> <span class="toc-text">stat()和fstat()系统调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#access-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-number">1.0.5.</span> <span class="toc-text">access()系统调用</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/" title="Linux APUE学习：1、文件I/O操作"><img src="https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Linux APUE学习：1、文件I/O操作"/></a><div class="content"><a class="title" href="../2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/" title="Linux APUE学习：1、文件I/O操作">Linux APUE学习：1、文件I/O操作</a><time datetime="2023-03-08T13:44:00.000Z" title="发表于 2023-03-08 21:44:00">2023-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Lupe.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="petalinux方式移植linux"/></a><div class="content"><a class="title" href="../2023/03/02/petalinux%E6%96%B9%E5%BC%8F%E7%A7%BB%E6%A4%8Dlinux/" title="petalinux方式移植linux">petalinux方式移植linux</a><time datetime="2023-03-02T04:34:00.000Z" title="发表于 2023-03-02 12:34:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102镜像配置和使用"/></a><div class="content"><a class="title" href="../2023/03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用">ZCU102镜像配置和使用</a><time datetime="2023-03-02T03:11:00.000Z" title="发表于 2023-03-02 11:11:00">2023-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ZCU102+ADRV9009使用GNU Radio开发使用"/></a><div class="content"><a class="title" href="../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用">ZCU102+ADRV9009使用GNU Radio开发使用</a><time datetime="2022-12-07T08:55:00.000Z" title="发表于 2022-12-07 16:55:00">2022-12-07</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://s2.loli.net/2022/08/05/eyrKMHmW9fAsEGo.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：桂ICP备2020011387号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
