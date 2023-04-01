@@ -1,0 +1,337 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>C按位运算符 | Roxy Blog</title><meta name="keywords" content="C语言"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C按位运算符​	C按位运算符，重读后发现对后续写驱动很有用处，结合自己理解做记录 一、按位逻辑运算符复习一下常见的四种按位逻辑运算符，和数电内容基本一致 1、二进制反码或按位取反：~同数电非门，通过逐位比较两个运算对象，生成一个新值。  12~(10010001)	&#x2F;&#x2F; 表达式01101110	&#x2F;&#x2F; 结果式  ​	若val的类型为unsigned char即uint8_t，值为00000010，十">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C按位运算符">
+<meta property="og:url" content="http://blog.roxyblog.cn/2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="C按位运算符​	C按位运算符，重读后发现对后续写驱动很有用处，结合自己理解做记录 一、按位逻辑运算符复习一下常见的四种按位逻辑运算符，和数电内容基本一致 1、二进制反码或按位取反：~同数电非门，通过逐位比较两个运算对象，生成一个新值。  12~(10010001)	&#x2F;&#x2F; 表达式01101110	&#x2F;&#x2F; 结果式  ​	若val的类型为unsigned char即uint8_t，值为00000010，十">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg">
+<meta property="article:published_time" content="2023-04-01T14:25:22.000Z">
+<meta property="article:modified_time" content="2023-04-01T14:30:40.968Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="C语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C按位运算符',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-01 22:30:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C按位运算符</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-01T14:25:22.000Z" title="发表于 2023-04-01 22:25:22">2023-04-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-01T14:30:40.968Z" title="更新于 2023-04-01 22:30:40">2023-04-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/C%E8%AF%AD%E8%A8%80/">C语言</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C按位运算符"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="C按位运算符"><a href="#C按位运算符" class="headerlink" title="C按位运算符"></a>C按位运算符</h1><p>​	C按位运算符，重读后发现对后续写驱动很有用处，结合自己理解做记录</p>
+<h2 id="一、按位逻辑运算符"><a href="#一、按位逻辑运算符" class="headerlink" title="一、按位逻辑运算符"></a>一、按位逻辑运算符</h2><p>复习一下常见的四种按位逻辑运算符，和数电内容基本一致</p>
+<h3 id="1、二进制反码或按位取反："><a href="#1、二进制反码或按位取反：" class="headerlink" title="1、二进制反码或按位取反：~"></a>1、二进制反码或按位取反：~</h3><p>同数电非门，通过逐位比较两个运算对象，生成一个新值。</p>
+<p><img src="/assets/images/1017/image-20230401204732155.png" alt="image-20230401204732155"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~(<span class="number">10010001</span>)	<span class="comment">// 表达式</span></span><br><span class="line"><span class="number">01101110</span>	<span class="comment">// 结果式</span></span><br></pre></td></tr></table></figure>
+
+<p>​	若val的类型为unsigned char即uint8_t，值为<code>00000010</code>，十进制为<code>2</code>。那么，~val的值为<code>11111101</code>，十进制为<code>253</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用参考</span></span><br><span class="line">val = ~val;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、按位与：-amp"><a href="#2、按位与：-amp" class="headerlink" title="2、按位与：&amp;"></a>2、按位与：&amp;</h3><p>同数电与门，通过逐位比较两个运算对象，生成一个新值。</p>
+<p><img src="/assets/images/1017/image-20230401205520252.png" alt="image-20230401205520252"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">10010001</span>) &amp; (<span class="number">01101110</span>)  <span class="comment">// 这里拿两个互为非的进行与运算</span></span><br><span class="line"><span class="number">00000000</span>				 <span class="comment">// 那不就是全为0嘛</span></span><br><span class="line">    </span><br><span class="line">(<span class="number">10010001</span>) &amp; (<span class="number">01100101</span>)	 <span class="comment">// 取两个不相关的值时</span></span><br><span class="line"><span class="number">00000001</span>				 <span class="comment">// 结果1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用方法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val &amp;= <span class="number">0156</span>;	  <span class="comment">// 0156是八进制，数字前带0是八进制，0x是十六进制</span></span><br><span class="line">val = val &amp; <span class="number">0156</span>; <span class="comment">//二进制常量前面可以加上前缀 &quot;0b&quot; 或 &quot;0B&quot;，但这并不是 C 语言的标准语法，因此不是所有编译器都支持这种写法。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、按位或："><a href="#3、按位或：" class="headerlink" title="3、按位或： |"></a>3、按位或： |</h3><p>同数电或门，通过逐位比较两个运算对象，生成一个新值。</p>
+<p><img src="/assets/images/1017/image-20230401211052312.png" alt="image-20230401211052312"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10010001</span> | <span class="number">01101110</span>  	 <span class="comment">// 还是以拿两个互为非的进行或运算</span></span><br><span class="line"><span class="number">11111111</span>			 	 <span class="comment">// 全1了</span></span><br><span class="line">    </span><br><span class="line">(<span class="number">10010001</span>) | (<span class="number">01100101</span>)	 <span class="comment">// 取两个不相关的值时</span></span><br><span class="line"><span class="number">11110101</span>				 <span class="comment">// 结果245</span></span><br></pre></td></tr></table></figure>
+
+<p>使用方法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val |= <span class="number">0156</span>;		<span class="comment">// 表达式</span></span><br><span class="line">val = val | <span class="number">0156</span>;	<span class="comment">// 结果</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、按位异或："><a href="#4、按位异或：" class="headerlink" title="4、按位异或： ^"></a>4、按位异或： ^</h3><p>同数电异或门，通过逐位比较两个运算对象，生成一个新值。</p>
+<p><img src="/assets/images/1017/image-20230401212822464.png" alt="image-20230401212822464"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10010001</span> ^ <span class="number">01101110</span>  	 <span class="comment">// 还是以拿两个互为非的进行异或运算</span></span><br><span class="line"><span class="number">11111111</span>			 	 <span class="comment">// 全1了</span></span><br><span class="line">    </span><br><span class="line">(<span class="number">10010001</span>) | (<span class="number">01100101</span>)	 <span class="comment">// 取两个不相关的值时</span></span><br><span class="line"><span class="number">11110100</span>				 <span class="comment">// 结果244</span></span><br></pre></td></tr></table></figure>
+
+<p>使用方法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val ^= <span class="number">0156</span>;		<span class="comment">// 表达式</span></span><br><span class="line">val = val ^ <span class="number">0156</span>;	<span class="comment">// 结果245</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、用法"><a href="#二、用法" class="headerlink" title="二、用法"></a>二、用法</h2><h3 id="1、掩码"><a href="#1、掩码" class="headerlink" title="1、掩码"></a>1、掩码</h3><p>​	c语言按位与运算符常用于掩码（mark）</p>
+<p>​	掩码是一个二进制数字，用于屏蔽或标记二进制数中的一些位。在计算机科学中，掩码通常被用来表示或隐藏某些信息。<strong>通常情况下，掩码是一个二进制数字，用于与另一个二进制数进行按位运算，从而将原始数据中的一些位清除或保留下来。</strong>掩码的常见用途包括权限控制、数据加密和数据压缩等方面。</p>
+<p>​	掩码的应用非常广泛。在权限控制中，掩码被用来限制用户对特定资源的访问权限。例如，一个文件的权限掩码可能是一个 8 位二进制数，其中每一位代表一种访问权限，例如读、写和执行。在这种情况下，用户的权限也被表示为一个二进制数，用于与文件的权限掩码进行按位与运算，以确定用户是否具有访问权限。</p>
+<p>​	掩码还可以用于数据加密和解密。例如，在对数据进行加密时，一个掩码可以用来隐藏数据的一些位。只有拥有正确的掩码才能解密数据，从而确保数据的安全性。</p>
+<p>​	掩码还可以用于网络通信中。例如，在 IPv4 中，IP 地址和子网掩码都是 32 位的二进制数。子网掩码用来标识网络地址和主机地址的分隔符，用于确定特定 IP 地址所属的网络。当两个计算机在同一子网中进行通信时，掩码可以用来判断它们是否在同一网络中，从而决定是否需要进行路由。</p>
+<p>​	总的来说，掩码是一种十分重要的二进制技术，用于标记、保留或清除二进制数中的一些位。它在许多领域都有广泛的应用，包括权限控制、数据加密、网络通信等。</p>
+<h3 id="2、打开位（设置位）"><a href="#2、打开位（设置位）" class="headerlink" title="2、打开位（设置位）"></a>2、打开位（设置位）</h3><blockquote>
+<p>​	有时，需要打开一个值的特定位，同时保持其他位不变，这种情况可以使用按<strong>位或运算符(|)</strong></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 标志位flags,目标是打开flags的第0位和第7位，而其他不变</span></span><br><span class="line"><span class="type">int</span> flags = <span class="number">0xE</span>;			<span class="comment">// 二进制表示为00001110</span></span><br><span class="line"><span class="comment">// 使用|运算符，任何位与0组合，结果都为其本身，任何位与1组合，结果都为1。</span></span><br><span class="line"><span class="type">int</span> mark  = <span class="number">0x81</span>;			<span class="comment">// 二进制表示为10000001</span></span><br><span class="line"><span class="comment">// 将mark第0位和第七位设为1，其余为0，与flags进行或运算，则成功打开flags的第7位和第0位</span></span><br><span class="line">flags |= mark;				<span class="comment">// 结果为10001111 = 0x8F = 143</span></span><br></pre></td></tr></table></figure>
+
+<p>同样，这种方法根据<strong>mark中为1的位</strong>，可以将<strong>flags中对应的位设置为1</strong>，其他位不变</p>
+<h3 id="3、关闭位（清空位）"><a href="#3、关闭位（清空位）" class="headerlink" title="3、关闭位（清空位）"></a>3、关闭位（清空位）</h3><blockquote>
+<p>​	与打开位类似，有时需要关闭一个值的特定位，同时保持其他位不变，这种情况需要使用按<strong>与位运算符(&amp;)和位或运算符(|)</strong></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 标志位flags,目标是关闭flags的第1位，而其他不变</span></span><br><span class="line"><span class="type">int</span> flags = <span class="number">0xE</span>;			<span class="comment">// 二进制表示为00001110</span></span><br><span class="line"><span class="comment">// 先将mark要关闭的位设为1</span></span><br><span class="line"><span class="type">int</span> mark  = <span class="number">0x2</span>;			<span class="comment">// 二进制表示为00000010</span></span><br><span class="line"><span class="comment">// ~mark将mark所有的0变为1,1变为0，值变为11111101，再进行&amp;运算，进行与运算任何位与1组合都为其本身，与0组合为0</span></span><br><span class="line">flags &amp;= ~mark;				<span class="comment">// 结果为00001100 = 0xC = 12</span></span><br></pre></td></tr></table></figure>
+
+<p>同样，这种方法根据<strong>mark中为1的位</strong>，可以将<strong>flags中对应的位设置为0</strong>，其他位不变</p>
+<h3 id="4、切换位"><a href="#4、切换位" class="headerlink" title="4、切换位"></a>4、切换位</h3><blockquote>
+<p>​	切换位的意思是：打开已关闭的位，或关闭已打开的位，这种情况可以使用<strong>异或运算符(^)</strong></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 标志位flags,目标是切换flags的第1位和第5位，而其他不变</span></span><br><span class="line"><span class="type">int</span> flags = <span class="number">0xE</span>;			<span class="comment">// 二进制表示为00001110</span></span><br><span class="line"><span class="comment">// 先将mark要切换的位设为1</span></span><br><span class="line"><span class="type">int</span> mark  = <span class="number">0x22</span>;			<span class="comment">// 二进制表示为00100010</span></span><br><span class="line"><span class="comment">// 如果b为1,1^b为0；如果b为0,1^b为1；无论b为0还是1,0^b的结果都是b</span></span><br><span class="line">flags ^= mark;				<span class="comment">// 结果为00101100 = 0x2c = 44</span></span><br></pre></td></tr></table></figure>
+
+<p>同样，这种方法根据<strong>mark中为1的位</strong>，可以将<strong>flags中对应的位切换</strong>，其他位不变</p>
+<h3 id="5、检查位的值"><a href="#5、检查位的值" class="headerlink" title="5、检查位的值"></a>5、检查位的值</h3><blockquote>
+<p>​	有时需要检查某位的值，这种情况可以使用<strong>与运算符(&amp;)</strong></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 目标是检查flags中2号位的值是否为1</span></span><br><span class="line"><span class="type">int</span> flags = <span class="number">0xE</span>;			<span class="comment">// 二进制表示为00001110</span></span><br><span class="line"><span class="comment">// 先将mark要检查的位设为1</span></span><br><span class="line"><span class="type">int</span> mark  = <span class="number">0x8</span>;			<span class="comment">// 二进制表示为00000100</span></span><br><span class="line"><span class="comment">// 不能这样直接比较位的值!!!!!!!!!</span></span><br><span class="line"><span class="keyword">if</span> (flags == mark)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello!\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这样做即使flags的2号为为1，其他位的值也会导致比较结果为false。因此，必须覆盖flags中的其他值，只用2号为和mark比较</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 先&amp;运算后，flags除了mark位为1的相同位，其他位都与0位做与运算，都变为0了，只有与mark位为1的位保留原来的数据</span></span><br><span class="line"><span class="comment">// flags&amp;mark运算后结果为00000100，此时再与mark比较，若返回ture则检查的位打开，返回false则检查的位关闭</span></span><br><span class="line"><span class="keyword">if</span> ((flags &amp; mark) == mark)</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;hello!\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/">http://blog.roxyblog.cn/2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/C%E8%AF%AD%E8%A8%80/">C语言</a></div><div class="post_share"><div class="social-share" data-image="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="../../../03/31/stm32%E9%85%8D%E7%BD%AEADS8681/"><img class="next-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Rudeus" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">stm32配置ADS8681</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="../categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.</span> <span class="toc-text">C按位运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%8C%89%E4%BD%8D%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.1.</span> <span class="toc-text">一、按位逻辑运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8F%8D%E7%A0%81%E6%88%96%E6%8C%89%E4%BD%8D%E5%8F%96%E5%8F%8D%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、二进制反码或按位取反：~</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%8C%89%E4%BD%8D%E4%B8%8E%EF%BC%9A-amp"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、按位与：&amp;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%8C%89%E4%BD%8D%E6%88%96%EF%BC%9A"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、按位或： |</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%8C%89%E4%BD%8D%E5%BC%82%E6%88%96%EF%BC%9A"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、按位异或： ^</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%94%A8%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">二、用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%8E%A9%E7%A0%81"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、掩码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%89%93%E5%BC%80%E4%BD%8D%EF%BC%88%E8%AE%BE%E7%BD%AE%E4%BD%8D%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、打开位（设置位）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%85%B3%E9%97%AD%E4%BD%8D%EF%BC%88%E6%B8%85%E7%A9%BA%E4%BD%8D%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、关闭位（清空位）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%88%87%E6%8D%A2%E4%BD%8D"><span class="toc-number">1.2.4.</span> <span class="toc-text">4、切换位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E6%A3%80%E6%9F%A5%E4%BD%8D%E7%9A%84%E5%80%BC"><span class="toc-number">1.2.5.</span> <span class="toc-text">5、检查位的值</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C按位运算符"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="C按位运算符"/></a><div class="content"><a class="title" href="../2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C按位运算符">C按位运算符</a><time datetime="2023-04-01T14:25:22.000Z" title="发表于 2023-04-01 22:25:22">2023-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/31/stm32%E9%85%8D%E7%BD%AEADS8681/" title="stm32配置ADS8681"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/Rudeus" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="stm32配置ADS8681"/></a><div class="content"><a class="title" href="../2023/03/31/stm32%E9%85%8D%E7%BD%AEADS8681/" title="stm32配置ADS8681">stm32配置ADS8681</a><time datetime="2023-03-31T14:06:00.000Z" title="发表于 2023-03-31 22:06:00">2023-03-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A2%E3%80%81%E7%BD%91%E7%BB%9Csocket%E7%BC%96%E7%A8%8B/" title="Linux APUE学习：2、网络socket编程"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/roxy1.jpeg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Linux APUE学习：2、网络socket编程"/></a><div class="content"><a class="title" href="../2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A2%E3%80%81%E7%BD%91%E7%BB%9Csocket%E7%BC%96%E7%A8%8B/" title="Linux APUE学习：2、网络socket编程">Linux APUE学习：2、网络socket编程</a><time datetime="2023-03-08T14:11:00.000Z" title="发表于 2023-03-08 22:11:00">2023-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/" title="Linux APUE学习：1、文件I/O操作"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/pic1.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Linux APUE学习：1、文件I/O操作"/></a><div class="content"><a class="title" href="../2023/03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/" title="Linux APUE学习：1、文件I/O操作">Linux APUE学习：1、文件I/O操作</a><time datetime="2023-03-08T13:44:00.000Z" title="发表于 2023-03-08 21:44:00">2023-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name2.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="使用VSCode远程Remote SSH链接"/></a><div class="content"><a class="title" href="../2023/03/02/%E4%BD%BF%E7%94%A8VSCode%E8%BF%9C%E7%A8%8BRemote-SSH%E9%93%BE%E6%8E%A5/" title="使用VSCode远程Remote SSH链接">使用VSCode远程Remote SSH链接</a><time datetime="2023-03-02T04:39:00.000Z" title="发表于 2023-03-02 12:39:00">2023-03-02</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：桂ICP备2020011387号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
