@@ -1,0 +1,407 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>UBOOT、KERNEL移植过程 | Roxy Blog</title><meta name="keywords" content="Linux,Uboot"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="UBOOT、KERNEL移植过程Linux搭建环境​		在进行UBOOT、KERNEL移植之前，需要先在Linux下搭建好开发环境，基本的有tftp环境、nfs环境、交叉编译工具链的搭建 报错处理​		tftp和nfs环境搭建时，如果配置文件写错，重启服务时会有报错提示，此时需要查看系统日志根据日志消息解决问题 1234# 查看系统日志指令tail -f &#x2F;var&#x2F;log&#x2F;syslog# 或是查看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UBOOT、KERNEL移植过程">
+<meta property="og:url" content="http://blog.roxyblog.cn/2023/05/15/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B/">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="UBOOT、KERNEL移植过程Linux搭建环境​		在进行UBOOT、KERNEL移植之前，需要先在Linux下搭建好开发环境，基本的有tftp环境、nfs环境、交叉编译工具链的搭建 报错处理​		tftp和nfs环境搭建时，如果配置文件写错，重启服务时会有报错提示，此时需要查看系统日志根据日志消息解决问题 1234# 查看系统日志指令tail -f &#x2F;var&#x2F;log&#x2F;syslog# 或是查看">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.roxyblog.cn/assets/images/1020/Eris.jpg">
+<meta property="article:published_time" content="2023-05-15T15:04:00.000Z">
+<meta property="article:modified_time" content="2023-05-15T15:10:35.447Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Uboot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.roxyblog.cn/assets/images/1020/Eris.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2023/05/15/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'UBOOT、KERNEL移植过程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-15 23:10:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('../../../../assets/images/1020/Eris.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">UBOOT、KERNEL移植过程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-15T15:04:00.000Z" title="发表于 2023-05-15 23:04:00">2023-05-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-15T15:10:35.447Z" title="更新于 2023-05-15 23:10:35">2023-05-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="UBOOT、KERNEL移植过程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="UBOOT、KERNEL移植过程"><a href="#UBOOT、KERNEL移植过程" class="headerlink" title="UBOOT、KERNEL移植过程"></a>UBOOT、KERNEL移植过程</h1><h2 id="Linux搭建环境"><a href="#Linux搭建环境" class="headerlink" title="Linux搭建环境"></a>Linux搭建环境</h2><p>​		在进行UBOOT、KERNEL移植之前，需要先在Linux下搭建好开发环境，基本的有tftp环境、nfs环境、交叉编译工具链的搭建</p>
+<h3 id="报错处理"><a href="#报错处理" class="headerlink" title="报错处理"></a>报错处理</h3><p>​		tftp和nfs环境搭建时，如果配置文件写错，重启服务时会有报错提示，此时需要查看系统日志根据日志消息解决问题</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看系统日志指令</span></span><br><span class="line"><span class="built_in">tail</span> -f /var/log/syslog</span><br><span class="line"><span class="comment"># 或是查看倒数10条日志</span></span><br><span class="line"><span class="built_in">tail</span> -10 /var/log/syslog</span><br></pre></td></tr></table></figure>
+
+<h3 id="tftp环境"><a href="#tftp环境" class="headerlink" title="tftp环境"></a>tftp环境</h3><p>​		tftp协议：</p>
+<blockquote>
+<p> 典型的cs模型: ubuntu为服务器端，开发板为客户端</p>
+<p>客户端可以下载服务器端上的内容，效率高</p>
+</blockquote>
+<p>1、查看是否已经安装tftp服务器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -s tftpd-hda</span><br></pre></td></tr></table></figure>
+
+<p>2、若不存在则执行以下命令安装tftp服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新apt源</span></span><br><span class="line">sudo apt-get updata</span><br><span class="line"><span class="comment"># 安装tftp相关服务</span></span><br><span class="line"><span class="comment"># tftpd-hpa是服务器 tftp-hda是客户端</span></span><br><span class="line">sudo apt-get install tftpd-hpa tftp-hpa -y</span><br></pre></td></tr></table></figure>
+
+<p>3、创建服务器工作路径并设置为最高权限</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在用户路径下创建tftp文件夹作为tftp共享文件夹</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> ~/tftp</span><br><span class="line"><span class="comment"># 设置权限</span></span><br><span class="line">sudo <span class="built_in">chmod</span> 777 ~/tftp -R</span><br></pre></td></tr></table></figure>
+
+<p>4、修改tftp服务器配置文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件</span></span><br><span class="line">sudo vim /etc/default/tftpd-hpa</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/default/tftpd-hpa</span></span><br><span class="line"></span><br><span class="line">TFTP_USERNAME=<span class="string">&quot;tftp&quot;</span>	<span class="comment"># 命令名称</span></span><br><span class="line">TFTP_DIRECTORY=<span class="string">&quot;/home/noah/tftp&quot;</span>	<span class="comment"># tftp共享路径</span></span><br><span class="line">TFTP_ADDRESS=<span class="string">&quot;:69&quot;</span>	<span class="comment"># tftp使用的端口</span></span><br><span class="line">TFTP_OPTIONS=<span class="string">&quot;-c -s -l&quot;</span> <span class="comment"># tftp命令默认选项</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>5、重启tftp服务，使配置生效</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service tftpd-hpa restart</span><br></pre></td></tr></table></figure>
+
+<p>6、自行测试是否安装成功</p>
+<h3 id="nfs环境"><a href="#nfs环境" class="headerlink" title="nfs环境"></a>nfs环境</h3><p>​		<strong>网络文件系统</strong>（英语：<strong>Network File System</strong>，缩写作 <strong>NFS</strong>），搭建好后相当于在远程有一套文件系统，目的是使客户端主机可以访问服务器端文件，并且其过程与访问本地存储时一样</p>
+<p>1、查看是否已经安装NFS</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -s nfs-kernel-server</span><br></pre></td></tr></table></figure>
+
+<p>2、若不存在则执行以下命令安装tftp服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新apt源</span></span><br><span class="line">sudo apt-get updata</span><br><span class="line"><span class="comment"># 安装nfs-kernel-server相关服务</span></span><br><span class="line">sudo apt-get install nfs-kernel-server -y</span><br></pre></td></tr></table></figure>
+
+<p>3、创建服务器工作路径并设置为最高权限</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在用户路径下创建nfs文件夹</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> -p ~/nfs/rootfs</span><br><span class="line"><span class="comment"># 设置权限</span></span><br><span class="line">sudo <span class="built_in">chmod</span> 777 ~/nfs/rootfs -R</span><br></pre></td></tr></table></figure>
+
+<p>4、修改nfs服务器配置文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/exports</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在文章的末尾添加</span></span><br><span class="line"><span class="comment"># 这里设置 IP为 * 即允许所有客户端挂载</span></span><br><span class="line">/home/noah/nfs/rootfs/ *(rw,<span class="built_in">sync</span>,no_subtree_check,no_root_squash)</span><br></pre></td></tr></table></figure>
+
+<p>这一行的详细释义为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 此为示例</span></span><br><span class="line">/home/test 192.168.121.0/24(rw)</span><br><span class="line"><span class="comment"># 共享文件路径 允许共享网段（共享文件可执行权限）</span></span><br></pre></td></tr></table></figure>
+
+<p>共享文件可执行权限的详细释义为：</p>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>ro</strong></td>
+<td align="center">只读访问</td>
+</tr>
+<tr>
+<td align="center"><strong>rw</strong></td>
+<td align="center">读写访问</td>
+</tr>
+<tr>
+<td align="center"><strong>sync</strong></td>
+<td align="center">所有数据在请求时写入共享</td>
+</tr>
+<tr>
+<td align="center"><strong>async</strong></td>
+<td align="center">nfs 在写入数据前可以响应请求</td>
+</tr>
+<tr>
+<td align="center"><strong>secure</strong></td>
+<td align="center">nfs 通过 1024 以下的安全 TCP&#x2F;IP 端口发送</td>
+</tr>
+<tr>
+<td align="center"><strong>insecure</strong></td>
+<td align="center">nfs 通过 1024 以上的端口发送</td>
+</tr>
+<tr>
+<td align="center"><strong>wdelay</strong></td>
+<td align="center">如果多个用户要写入 nfs 目录，则归组写入（默认）</td>
+</tr>
+<tr>
+<td align="center"><strong>no_wdelay</strong></td>
+<td align="center">如果多个用户要写入 nfs 目录，则立即写入，当使用 async 时，无需此设置</td>
+</tr>
+<tr>
+<td align="center"><strong>hide</strong></td>
+<td align="center">在 nfs 共享目录中不共享其子目录</td>
+</tr>
+<tr>
+<td align="center"><strong>no_hide</strong></td>
+<td align="center">共享 nfs 目录的子目录</td>
+</tr>
+<tr>
+<td align="center"><strong>subtree_check</strong></td>
+<td align="center">如果共享 &#x2F;usr&#x2F;bin 之类的子目录时，强制 nfs 检查父目录的权限（默认）</td>
+</tr>
+<tr>
+<td align="center"><strong>no_subtree_check</strong></td>
+<td align="center">不检查父目录权限</td>
+</tr>
+<tr>
+<td align="center"><strong>all_squash</strong></td>
+<td align="center">共享文件的 UID 和 GID 映射匿名用户 anonymous，适合公用目录</td>
+</tr>
+<tr>
+<td align="center"><strong>no_all_squash</strong></td>
+<td align="center">保留共享文件的 UID 和 GID（默认）</td>
+</tr>
+<tr>
+<td align="center"><strong>root_squash</strong></td>
+<td align="center">root 用户的所有请求映射成如 anonymous 用户一样的权限（默认）</td>
+</tr>
+<tr>
+<td align="center"><strong>no_root_squash</strong></td>
+<td align="center">root 用户具有根目录的完全管理访问权限</td>
+</tr>
+<tr>
+<td align="center"><strong>anonuid&#x3D;xxx</strong></td>
+<td align="center">指定 nfs 服务器 &#x2F;etc&#x2F;passwd 文件中匿名用户的 UID</td>
+</tr>
+<tr>
+<td align="center"><strong>anongid&#x3D;xxx</strong></td>
+<td align="center">指定 nfs 服务器 &#x2F;etc&#x2F;passwd 文件中匿名用户的 GID</td>
+</tr>
+</tbody></table>
+<p>5、重启nfs服务，使得配置生效</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service nfs-kernel-server restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="交叉编译工具链"><a href="#交叉编译工具链" class="headerlink" title="交叉编译工具链"></a>交叉编译工具链</h3><p>Buildroot制作交叉编译器</p>
+<p>​		一般来说，制作交叉编译器，有两种工具，即<strong>crosstool-NG</strong> 和<strong>Buildroot</strong>，制作交叉编译器仅是第一步，后续还需要使用交叉编译器移植bootloader、kernel和制作根文件系统rootfs以及交叉编译各种需要的应用程序。其中 <strong>crosstool-NG</strong> 只是制作了一个交叉编译器，而如果你希望一键完成这所有的事情， 则可以使用 <strong>Buildroot</strong> 。</p>
+<p>​		<strong>Buildroot</strong>是一组<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Makefile">Makefile</a>和<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Patch">Patch</a>文件，用来简化和自动化为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%BB%9F">嵌入式系统</a>建造一个完整和可引导的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Linux">Linux</a>环境的过程，特别是在使用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%A4%E5%8F%89%E7%B7%A8%E8%AD%AF%E5%99%A8">交叉编译</a>来允许在单一的基于Linux的开发系统上为多个目标平台进行建造的时候。Buildroot可以自动建造所需要的交叉编译<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B7%A5%E5%85%B7%E9%8F%88">工具链</a>，创建<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">根文件系统</a>，编译一个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Linux%E5%86%85%E6%A0%B8">Linux内核</a>映像，并为目标嵌入式系统生成<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F">引导装载器</a>，它还可以进行这些独立步骤的任何组合。</p>
+<p>​		接下来我们将介绍如何使用 buildroot 来制作交叉编译器，同时生成一个开发板可以使用的根文件系统。需要注意的是，因为 Linux 内核 和 u-boot 今后需要自己针对开发板做移植修改，所以这里将不编译 Linux内核 和 u-boot 程序。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2023/05/15/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B/">http://blog.roxyblog.cn/2023/05/15/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/Linux/">Linux</a><a class="post-meta__tags" href="../../../../tags/Uboot/">Uboot</a></div><div class="post_share"><div class="social-share" data-image="../../../../assets/images/1020/Eris.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="../../../04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%B8%89%EF%BC%9A%E6%A8%A1%E5%9D%97%E5%8F%82%E6%95%B0%E5%92%8C%E6%A8%A1%E5%9D%97%E4%B9%8B%E9%97%B4%E9%80%9A%E4%BF%A1/"><img class="next-cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/77512126-min.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux bsp驱动学习三：模块参数和模块之间通信</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="../../../03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A1%E3%80%81%E6%96%87%E4%BB%B6I-O%E6%93%8D%E4%BD%9C/" title="Linux APUE学习：1、文件I&#x2F;O操作"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/pic1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-08</div><div class="title">Linux APUE学习：1、文件I&#x2F;O操作</div></div></a></div><div><a href="../../../03/08/Linux-APUE%E5%AD%A6%E4%B9%A0%EF%BC%9A2%E3%80%81%E7%BD%91%E7%BB%9Csocket%E7%BC%96%E7%A8%8B/" title="Linux APUE学习：2、网络socket编程"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/roxy1.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-08</div><div class="title">Linux APUE学习：2、网络socket编程</div></div></a></div><div><a href="../../../../2022/12/07/ZCU102-ADRV9009%E4%BD%BF%E7%94%A8GNU-Radio%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8/" title="ZCU102+ADRV9009使用GNU Radio开发使用"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-12-07</div><div class="title">ZCU102+ADRV9009使用GNU Radio开发使用</div></div></a></div><div><a href="../../../03/02/ZCU102%E9%95%9C%E5%83%8F%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/" title="ZCU102镜像配置和使用"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/name3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-03-02</div><div class="title">ZCU102镜像配置和使用</div></div></a></div><div><a href="../../../04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C%EF%BC%9A%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9D%97%E4%B8%8EHello-World/" title="Linux bsp驱动学习二：驱动模块与Hello World"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/107250039-min.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">Linux bsp驱动学习二：驱动模块与Hello World</div></div></a></div><div><a href="../../../04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%B8%80%EF%BC%9A%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/" title="Linux bsp驱动学习一：驱动开发入门"><img class="cover" src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/107277492.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">Linux bsp驱动学习一：驱动开发入门</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="../categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">UBOOT、KERNEL移植过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.</span> <span class="toc-text">Linux搭建环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">报错处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tftp%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.2.</span> <span class="toc-text">tftp环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nfs%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.3.</span> <span class="toc-text">nfs环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="toc-number">1.1.4.</span> <span class="toc-text">交叉编译工具链</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2023/05/15/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B/" title="UBOOT、KERNEL移植过程"><img src="../assets/images/1020/Eris.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="UBOOT、KERNEL移植过程"/></a><div class="content"><a class="title" href="../2023/05/15/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B/" title="UBOOT、KERNEL移植过程">UBOOT、KERNEL移植过程</a><time datetime="2023-05-15T15:04:00.000Z" title="发表于 2023-05-15 23:04:00">2023-05-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%B8%89%EF%BC%9A%E6%A8%A1%E5%9D%97%E5%8F%82%E6%95%B0%E5%92%8C%E6%A8%A1%E5%9D%97%E4%B9%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" title="Linux bsp驱动学习三：模块参数和模块之间通信"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/77512126-min.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Linux bsp驱动学习三：模块参数和模块之间通信"/></a><div class="content"><a class="title" href="../2023/04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%B8%89%EF%BC%9A%E6%A8%A1%E5%9D%97%E5%8F%82%E6%95%B0%E5%92%8C%E6%A8%A1%E5%9D%97%E4%B9%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" title="Linux bsp驱动学习三：模块参数和模块之间通信">Linux bsp驱动学习三：模块参数和模块之间通信</a><time datetime="2023-04-18T15:05:00.000Z" title="发表于 2023-04-18 23:05:00">2023-04-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%B8%80%EF%BC%9A%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/" title="Linux bsp驱动学习一：驱动开发入门"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/107277492.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Linux bsp驱动学习一：驱动开发入门"/></a><div class="content"><a class="title" href="../2023/04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%B8%80%EF%BC%9A%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/" title="Linux bsp驱动学习一：驱动开发入门">Linux bsp驱动学习一：驱动开发入门</a><time datetime="2023-04-18T11:48:00.000Z" title="发表于 2023-04-18 19:48:00">2023-04-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C%EF%BC%9A%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9D%97%E4%B8%8EHello-World/" title="Linux bsp驱动学习二：驱动模块与Hello World"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/107250039-min.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="Linux bsp驱动学习二：驱动模块与Hello World"/></a><div class="content"><a class="title" href="../2023/04/18/Linux-bsp%E9%A9%B1%E5%8A%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C%EF%BC%9A%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9D%97%E4%B8%8EHello-World/" title="Linux bsp驱动学习二：驱动模块与Hello World">Linux bsp驱动学习二：驱动模块与Hello World</a><time datetime="2023-04-18T11:24:00.000Z" title="发表于 2023-04-18 19:24:00">2023-04-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C按位运算符"><img src="https://cdn-1311941597.cos.ap-shanghai.myqcloud.com/blog/mio.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="C按位运算符"/></a><div class="content"><a class="title" href="../2023/04/01/C%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C按位运算符">C按位运算符</a><time datetime="2023-04-01T14:25:22.000Z" title="发表于 2023-04-01 22:25:22">2023-04-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('../../../../assets/images/1020/Eris.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：桂ICP备2022011387号-1</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
