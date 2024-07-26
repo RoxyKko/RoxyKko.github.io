@@ -1,0 +1,538 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>ARM微处理器基础学习（一） | Roxy Blog</title><meta name="keywords" content="ARM"><meta name="author" content="Roxy"><meta name="copyright" content="Roxy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ARM微处理器基础ARM核硬件结构各大半导体生产商从ARM公司购买添加了特定模块的ARM微处理器核，再根据不同的应用需求，加入适当的外围电路，最终形成了半导体厂商自己的ARM微处理器芯片。一个典型的使用ARM内核的微处理器硬件结构如下示：  每个方框表示一个功能或特性，方框之间连线为传输数据的总线。 可以看出，图示已经将硬件部分分成四类，以不同颜色&#x2F;符号表示出  ARM处理器 控制器：A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARM微处理器基础学习（一）">
+<meta property="og:url" content="http://blog.roxyblog.cn/2024/07/26/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
+<meta property="og:site_name" content="Roxy Blog">
+<meta property="og:description" content="ARM微处理器基础ARM核硬件结构各大半导体生产商从ARM公司购买添加了特定模块的ARM微处理器核，再根据不同的应用需求，加入适当的外围电路，最终形成了半导体厂商自己的ARM微处理器芯片。一个典型的使用ARM内核的微处理器硬件结构如下示：  每个方框表示一个功能或特性，方框之间连线为传输数据的总线。 可以看出，图示已经将硬件部分分成四类，以不同颜色&#x2F;符号表示出  ARM处理器 控制器：A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.roxyblog.cn/assets/images/1032/top.jpg">
+<meta property="article:published_time" content="2024-07-26T10:08:00.000Z">
+<meta property="article:modified_time" content="2024-07-26T10:15:50.247Z">
+<meta property="article:author" content="Roxy">
+<meta property="article:tag" content="ARM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.roxyblog.cn/assets/images/1032/top.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/08/09/TCuUdB6vAoErRiO.png"><link rel="canonical" href="http://blog.roxyblog.cn/2024/07/26/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="../../../../css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ARM微处理器基础学习（一）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-26 18:15:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_3568438_eazzyx00bn4.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="../categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="../index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="../archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="../tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="../categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="../messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="../link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="../aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('../../../../assets/images/1032/top.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="../index.html">Roxy Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="../index.html"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="../archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="../tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="../categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="../messageboard/"><i class="fa-fw iconfont icon-a-ziyuan132"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="../link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="../aboutme/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ARM微处理器基础学习（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-26T10:08:00.000Z" title="发表于 2024-07-26 18:08:00">2024-07-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-07-26T10:15:50.247Z" title="更新于 2024-07-26 18:15:50">2024-07-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="../../../../categories/ARM/">ARM</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ARM微处理器基础学习（一）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="ARM微处理器基础"><a href="#ARM微处理器基础" class="headerlink" title="ARM微处理器基础"></a>ARM微处理器基础</h1><h2 id="ARM核硬件结构"><a href="#ARM核硬件结构" class="headerlink" title="ARM核硬件结构"></a>ARM核硬件结构</h2><p>各大半导体生产商从ARM公司购买添加了特定模块的ARM微处理器核，再根据不同的应用需求，加入适当的外围电路，最终形成了半导体厂商自己的ARM微处理器芯片。一个典型的使用ARM内核的微处理器硬件结构如下示：</p>
+<p><img src="/assets/images/1032/image-20240711172159879.png" alt="ARM内核的微处理器硬件结构"></p>
+<p>每个方框表示一个功能或特性，方框之间连线为传输数据的总线。</p>
+<p>可以看出，图示已经将硬件部分分成四类，以不同颜色&#x2F;符号表示出</p>
+<ul>
+<li>ARM处理器</li>
+<li>控制器：AHB裁决、中断控制器、存储器控制器、AHB-外桥、AHB-APB桥</li>
+<li>外围器件：UART、计数&#x2F;定时器、以太网、RTC</li>
+<li>总线</li>
+</ul>
+<p>四种不同器件负责不同的功能</p>
+<p><strong>ARM处理器：</strong>作为核心控制整个器件，一个处理器中包含了一个或多个ARM内核以及一些外围期间，如<strong>内存管理单元MMU</strong>(memory management unit)、<strong>处理器缓存CaChe</strong>等。</p>
+<p><strong>控制器：</strong>协调系统的重要功能模块。两个最常见典型的器件为<strong>中断控制器</strong>和<strong>存储器控制器</strong>。</p>
+<p><strong>外设接口部件：</strong>提供芯片与外部的所有输入&#x2F;输出（I&#x2F;O）功能。</p>
+<p><strong>总线：</strong>总线用于在器件不同部件之间通信。在传输总线中，<strong>ARM处理器</strong>作为<strong>总线主设备</strong>——拥有对总线的裁决权，通过同一总线，主设备可主动发起数据传输请求；外围器件作为<strong>总线从设备</strong>——在总线上处于被动，只能对主设备的传输请求做出反应。</p>
+<blockquote>
+<p>ARM处理器中广泛使用的总线结构称为<strong>高级微控制总线结构（AMBA）</strong>。最初的AMBA总线只包含<strong>ARM系统总线（ASB）</strong>和ARM外设总线（APB），后续又提出一种称为<strong>ARM高性能总线（AHB）</strong>和<strong>ARM高级可扩展接口（AXI）</strong>添加到AMBA中。</p>
+<ul>
+<li><strong>AHB (Advanced High-performance Bus)</strong>: 提供高性能的总线接口，适用于高带宽的需求。</li>
+<li><strong>APB (Advanced Peripheral Bus)</strong>: 适用于较低带宽和低功耗的外设。</li>
+<li><strong>ASB (Advanced System Bus)</strong>: 是AHB的前身，已经逐步被AHB替代。</li>
+</ul>
+</blockquote>
+<p>下面是AMBA架构及其主要总线的关系结构树</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">AMBA</span><br><span class="line">├── AHB (Advanced High-performance Bus)</span><br><span class="line">│   ├── AHB-Lite (简化版本)</span><br><span class="line">│   ├── AHB5 (支持TrustZone安全扩展)</span><br><span class="line">│   └── AHB5-Lite (AHB5的简化版本)</span><br><span class="line">├── APB (Advanced Peripheral Bus)</span><br><span class="line">│   ├── APB1</span><br><span class="line">│   └── APB2</span><br><span class="line">├── AXI (Advanced eXtensible Interface)</span><br><span class="line">│   ├── AXI3</span><br><span class="line">│   ├── AXI4</span><br><span class="line">│   ├── AXI4-Lite (简化版本)</span><br><span class="line">│   └── AXI4-Stream (数据流接口)</span><br><span class="line">└── ASB (Advanced System Bus) - 已逐步被AHB替代</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>AMBA各总线的主要特点</p>
+<p><strong>AHB (Advanced High-performance Bus)</strong></p>
+<ul>
+<li>高性能、支持突发传输、分割传输和总线仲裁</li>
+<li>多层AHB允许多个主设备和从设备并行操作</li>
+</ul>
+<p><strong>APB (Advanced Peripheral Bus)</strong></p>
+<ul>
+<li>简单的总线协议，主要用于连接外围设备</li>
+<li>不支持突发传输和分割传输，适用于低功耗设计</li>
+</ul>
+<p><strong>AXI (Advanced eXtensible Interface)</strong></p>
+<ul>
+<li>高性能和高带宽，支持多主设备、多从设备</li>
+<li>支持乱序传输和数据流传输 (AXI4-Stream)</li>
+</ul>
+<p><strong>ASB (Advanced System Bus)</strong></p>
+<ul>
+<li>AHB的前身，逐步被AHB替代</li>
+<li>类似AHB的功能，但性能较低</li>
+</ul>
+</blockquote>
+<p>上图所示的器件中有三条总线：一条AHB总线连接高性能片内外设；一条APB总线连接较慢的片内外设接口；第三条总线用于连接片外外设，这条外部总线需要一个特殊的桥用于与AHB连接。</p>
+<p><img src="/assets/images/1032/image-20240711175334951.png" alt="总线分类"></p>
+<h2 id="ARM核的数据流模型"><a href="#ARM核的数据流模型" class="headerlink" title="ARM核的数据流模型"></a>ARM核的数据流模型</h2><p>不同版本的ARM内核及其硬件特性是有所区别的，但是其数据流模型基本上是一致的。从软件开发者的角度来看，可以抛开具体硬件结构的细节，而抽象的将ARM内核看作是<strong>通过数据总线连接</strong>的各个功能单元模块所组成的集合，<font color = red><strong>ARM内核功能的实现最终体现为各种数据在不同部件之间的流动</strong></font>。</p>
+<p>现在以一个典型的冯诺依曼结构的ARM内核为例，下图为ARM核的数据流模型。</p>
+<p><img src="/assets/images/1032/image-20240724152814355.png" alt="典型的冯诺依曼结构的ARM内核"></p>
+<p><font color = blue>此图的绘制过于综合，将两种指令的流程混合绘制在内了，不好理解，此处将其拆分成为<strong>数据处理指令</strong>和<strong>内存访问指令（Load-store指令）</strong>的两个不同流程进行说明，但让我们先看看原文章的描述</font></p>
+<p>数据通过数据总线进入处理器核，这里所指的数据可能是一条要执行的指令或一个数据项。处理器如何区分是指令还是数据项，主要依赖于<strong>程序计数器（Program Counter，PC）的管理</strong>。PC指向当前要执行的指令地址，当需要从存储器读取指令时，PC的值会被送到存储器，读取出的内容会被当作指令进行处理；当需要从存储器读取数据时，指令中的地址会被用来访问存储器，读取出的内容会被当作数据进行处理。</p>
+<p>指令译码器在指令执行前先将它们翻译。每一条可执行指令都属于一个特定的指令集。</p>
+<p>与所有的RISC处理器相同，ARM处理器采用Load-store体系结构，这就意味着它只有两种类型的指令用于把数据移入&#x2F;移出寄存器：load指令从存储器复制数据到内核的寄存器；反过来，store指令从寄存器里复制数据到存储器。<strong>没有直接操作存储器的数据处理指令，因此数据的处理只能在寄存器里进行</strong>。<font color = red>由此可知，数据从存储器加载至寄存器，再通过处理器的运算单元运算得出结果，再存入指定寄存器，再进一步写入存储器，这既是数据处理指令的大概流程</font>。</p>
+<p>对于32位处理器的ARM内核，大部分指令认为寄存器中保存的是32位有符号或无符号数。当从存储器读取数据至一个寄存器时，符号扩展硬件会把8位和16位的<strong>有符号数</strong>转换成32位。<font color = red>有符号数的二进制存储中，若为正数，其最高位为1，而不同位数的数据符号位不相同，符号扩展硬件的意义正如其名：在于保持数据符号和数值的同时，增加数据的二进制位数，相信这应该很好理解</font>。</p>
+<p>典型的ARM指令通常由2个源寄存器Rn和Rm、一个结果或目的寄存器Rd。源操作数分别通过内部总线A和B从寄存器文件中读出。</p>
+<p>算术逻辑单元（ALU）或乘加器（MAC）通过总线A和B得到寄存器值Rn和Rm，并计算返回一个结果。数据处理指令直接把Rd终端计算结果写到寄存器中。Load-store指令使用ALU来产生一个地址，最高地址将被保存到地址寄存器并发送到地址总线上。<font color = red>Load-store指令就是内存访问指令。它们是ARM处理器中的一种指令类型，专门用于从内存加载数据到寄存器或将寄存器中的数据存储到内存中</font>。</p>
+<p><strong>ARM的一个重要特征是，寄存器Rm可以选择在进入ALU运算前是否先经过桶形移位器预处理。桶形移位器和ALU协作可以计算较大范围的表达式和地址。</strong></p>
+<h3 id="数据处理指令"><a href="#数据处理指令" class="headerlink" title="数据处理指令"></a><font color = blue>数据处理指令</font></h3><p>ARM数据处理指令处理数据流的详细流程：</p>
+<ol>
+<li><strong>指令获取（Instruction Fetch）</strong>：<ul>
+<li>ARM处理器从程序计数器（Program Counter, PC）指定的内存地址读取指令。</li>
+<li>读取的指令通过数据总线进入处理器核。</li>
+</ul>
+</li>
+<li><strong>指令译码（Instruction Decode）</strong>：<ul>
+<li>指令进入指令译码器。</li>
+<li>指令译码器将指令翻译成处理器能够理解和执行的微操作（micro-operations）。</li>
+<li>译码过程识别指令的类型（如数据处理指令、内存访问指令等）及其操作数和操作码。</li>
+</ul>
+</li>
+<li><strong>操作数获取（Operand Fetch）</strong>：<ul>
+<li>处理器根据译码结果，从寄存器文件中读取操作数。</li>
+<li>数据处理指令通常涉及从两个源寄存器（Rn和Rm）读取操作数，并可能涉及一个立即数（Immediate Value）。</li>
+<li>如果操作数包含立即数，立即数可能会经过旋转扩展（Rotate）来形成一个32位的值。</li>
+</ul>
+</li>
+<li><strong>符号扩展（Sign Extension）</strong>：<ul>
+<li>如果操作数是一个8位或16位的有符号数，处理器将进行符号扩展（Sign Extension），将其扩展为32位。</li>
+<li>符号扩展确保有符号数在操作过程中保持正确的符号和数值。</li>
+</ul>
+</li>
+<li><strong>执行（Execute）</strong>：<ul>
+<li>执行阶段，算术逻辑单元（ALU）或乘加器（MAC）执行具体的运算操作。</li>
+<li>ALU可以执行加法、减法、逻辑运算、移位操作等。</li>
+<li>MAC可以执行乘法和乘加运算（Multiply-Accumulate）。</li>
+</ul>
+</li>
+<li><strong>结果写回（Write Back）</strong>：<ul>
+<li>运算结果被存入目的寄存器（Rd）。</li>
+<li>结果也可能会更新条件标志寄存器（CPSR）的条件码位（如S位为1时）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>总结起来，ARM数据处理指令处理数据流的详细流程如下：</strong></p>
+<ol>
+<li><strong>处理器获得指令并从内存读取。</strong></li>
+<li><strong>指令译码器将指令翻译为微操作。</strong></li>
+<li><strong>处理器从寄存器文件中读取操作数，并可能进行符号扩展。</strong></li>
+<li><strong>ALU或MAC执行具体运算操作。</strong></li>
+<li><strong>运算结果存入目的寄存器，并可能更新条件标志。</strong></li>
+</ol>
+<h4 id="示例流程：加法指令的执行"><a href="#示例流程：加法指令的执行" class="headerlink" title="示例流程：加法指令的执行"></a>示例流程：加法指令的执行</h4><p>假设有一条加法指令<code>ADD R1, R2, R3</code>，其处理流程如下：</p>
+<ol>
+<li><strong>指令获取</strong>：<ul>
+<li>从内存读取指令<code>ADD R1, R2, R3</code>。</li>
+</ul>
+</li>
+<li><strong>指令译码</strong>：<ul>
+<li>译码器识别指令类型为加法，并识别出操作数寄存器<code>R2</code>和<code>R3</code>，以及目标寄存器<code>R1</code>。</li>
+</ul>
+</li>
+<li><strong>操作数获取</strong>：<ul>
+<li>从寄存器文件中读取<code>R2</code>和<code>R3</code>的值。</li>
+</ul>
+</li>
+<li><strong>执行</strong>：<ul>
+<li>ALU执行加法运算：<code>R1 = R2 + R3</code>。</li>
+</ul>
+</li>
+<li><strong>结果写回</strong>：<ul>
+<li>将运算结果写入目的寄存器<code>R1</code>。</li>
+</ul>
+</li>
+<li><strong>条件标志更新（如果S位设置）</strong>：<ul>
+<li>如果数据处理指令设置了S位（即设置条件标志位），则结果还会更新条件标志寄存器（CPSR）的条件码位。</li>
+<li>这些标志包括零标志（Z）、进位标志（C）、溢出标志（V）和负号标志（N），它们用于影响后续指令的条件执行。</li>
+<li>更新条件标志寄存器（CPSR）。</li>
+</ul>
+</li>
+<li><strong>继续执行下一条指令</strong>：<ul>
+<li>ARM处理器会更新程序计数器（PC）以指向下一条指令的地址。</li>
+<li>指令流水线（Pipeline）机制确保下一条指令可以被预取、译码和执行，以提高处理器的效率。</li>
+<li>更新PC，预取和执行下一条指令。</li>
+</ul>
+</li>
+<li><strong>返回处理结果</strong>：<ul>
+<li>调用程序通过读取寄存器<code>R1</code>获取结果。</li>
+<li>对于需要返回结果的情形，例如子程序调用（subroutine call），结果通常会存放在特定的寄存器中（如<code>R0</code>用于返回值）。</li>
+<li>主程序或调用程序可以通过读取这些特定寄存器来获取结果。</li>
+</ul>
+</li>
+<li><strong>内存写回（如果需要）</strong>：<ul>
+<li>在某些情况下，处理器可能需要将结果从寄存器写回到内存。例如，当处理结果需要保存到特定内存地址时，会使用存储指令（如<code>STR</code>）将结果写入内存。</li>
+<li>例如，<code>STR R1, [R0]</code>指令将<code>R1</code>中的结果存储到<code>R0</code>指向的内存地址。</li>
+<li>如果结果需要保存到内存，使用存储指令将结果写入特定内存地址。</li>
+</ul>
+</li>
+</ol>
+<h3 id="内存访问指令"><a href="#内存访问指令" class="headerlink" title="内存访问指令"></a><font color = blue>内存访问指令</font></h3><p>内存访问指令（例如加载和存储指令）在ARM处理器中的执行流程包括从内存读取数据到寄存器或将寄存器中的数据写入内存。以下是内存访问指令的详细执行流程：</p>
+<ol>
+<li><strong>指令获取（Instruction Fetch）</strong></li>
+</ol>
+<ul>
+<li>ARM处理器从程序计数器（PC）指定的内存地址读取指令。</li>
+<li>读取的指令通过数据总线进入处理器核。</li>
+</ul>
+<ol start="2">
+<li><strong>指令译码（Instruction Decode）</strong></li>
+</ol>
+<ul>
+<li>指令进入指令译码器。</li>
+<li>指令译码器将指令翻译成处理器能够理解和执行的微操作（micro-operations）。</li>
+<li>译码过程识别指令类型为内存访问指令（如<code>LDR</code>或<code>STR</code>），以及其操作数和操作码。</li>
+</ul>
+<ol start="3">
+<li><strong>地址计算（Address Calculation）</strong></li>
+</ol>
+<ul>
+<li>内存访问指令通常包含一个基地址寄存器（Rn）和一个偏移量（offset）。</li>
+<li>处理器计算内存地址，基地址寄存器（Rn）中的值与偏移量（offset）相加或相减，得出最终的内存地址。</li>
+<li>如果是前索引（P&#x3D;1），则地址计算在访问内存前完成。如果是后索引（P&#x3D;0），则地址计算在访问内存后完成。</li>
+</ul>
+<ol start="4">
+<li><strong>内存访问（Memory Access）</strong></li>
+</ol>
+<ul>
+<li><strong>加载指令（Load Instruction, 如LDR）</strong>：<ul>
+<li>处理器将计算出的内存地址发送到内存控制器。</li>
+<li>内存控制器从指定地址读取数据，并通过数据总线将数据传送回处理器。</li>
+<li>数据被写入目标寄存器（Rd）。</li>
+</ul>
+</li>
+<li><strong>存储指令（Store Instruction, 如STR）</strong>：<ul>
+<li>处理器从源寄存器（Rd）中读取数据。</li>
+<li>处理器将计算出的内存地址和要存储的数据发送到内存控制器。</li>
+<li>内存控制器将数据写入指定内存地址。</li>
+</ul>
+</li>
+</ul>
+<ol start="5">
+<li><strong>结果写回和条件标志更新（Write Back and Condition Flags Update）</strong></li>
+</ol>
+<ul>
+<li>对于加载指令，读取的数据被写回到目标寄存器（Rd）。</li>
+<li>对于存储指令，数据被写入指定内存地址后，寄存器内容不变。</li>
+<li>条件标志寄存器（CPSR）的更新通常不涉及内存访问指令，但某些特定指令或条件下可能会更新。</li>
+</ul>
+<ol start="6">
+<li><strong>继续执行下一条指令（Next Instruction Execution）</strong></li>
+</ol>
+<ul>
+<li>ARM处理器会更新程序计数器（PC）以指向下一条指令的地址。</li>
+<li>指令流水线（Pipeline）机制确保下一条指令可以被预取、译码和执行，以提高处理器的效率。</li>
+</ul>
+<h4 id="示例流程：加载指令（LDR-R1-R0-4-）"><a href="#示例流程：加载指令（LDR-R1-R0-4-）" class="headerlink" title="示例流程：加载指令（LDR R1, [R0, #4]）"></a>示例流程：加载指令（LDR R1, [R0, #4]）</h4><p>假设有一条加载指令<code>LDR R1, [R0, #4]</code>，其处理流程如下：</p>
+<ol>
+<li><strong>指令获取</strong>：<ul>
+<li>从内存读取指令<code>LDR R1, [R0, #4]</code>。</li>
+</ul>
+</li>
+<li><strong>指令译码</strong>：<ul>
+<li>译码器识别指令类型为加载指令，并识别出基地址寄存器<code>R0</code>、偏移量<code>#4</code>，以及目标寄存器<code>R1</code>。</li>
+</ul>
+</li>
+<li><strong>地址计算</strong>：<ul>
+<li>处理器计算内存地址：<code>地址 = R0 + 4</code>。</li>
+</ul>
+</li>
+<li><strong>内存访问</strong>：<ul>
+<li>内存控制器从计算出的地址读取数据。</li>
+<li>读取的数据通过数据总线传送回处理器，并写入寄存器<code>R1</code>。</li>
+</ul>
+</li>
+<li><strong>结果写回</strong>：<ul>
+<li>数据被写入目标寄存器<code>R1</code>。</li>
+</ul>
+</li>
+<li><strong>继续执行下一条指令</strong>：<ul>
+<li>更新PC，预取和执行下一条指令。</li>
+</ul>
+</li>
+</ol>
+<h4 id="示例流程：存储指令（STR-R1-R0-4-）"><a href="#示例流程：存储指令（STR-R1-R0-4-）" class="headerlink" title="示例流程：存储指令（STR R1, [R0, #4]）"></a>示例流程：存储指令（STR R1, [R0, #4]）</h4><p>假设有一条存储指令<code>STR R1, [R0, #4]</code>，其处理流程如下：</p>
+<ol>
+<li><strong>指令获取</strong>：<ul>
+<li>从内存读取指令<code>STR R1, [R0, #4]</code>。</li>
+</ul>
+</li>
+<li><strong>指令译码</strong>：<ul>
+<li>译码器识别指令类型为存储指令，并识别出基地址寄存器<code>R0</code>、偏移量<code>#4</code>，以及源寄存器<code>R1</code>。</li>
+</ul>
+</li>
+<li><strong>地址计算</strong>：<ul>
+<li>处理器计算内存地址：<code>地址 = R0 + 4</code>。</li>
+</ul>
+</li>
+<li><strong>内存访问</strong>：<ul>
+<li>处理器从寄存器<code>R1</code>读取数据。</li>
+<li>内存控制器将数据写入计算出的内存地址。</li>
+</ul>
+</li>
+<li><strong>结果写回</strong>：<ul>
+<li>数据写入内存后，寄存器<code>R1</code>内容保持不变。</li>
+</ul>
+</li>
+<li><strong>继续执行下一条指令</strong>：<ul>
+<li>更新PC，预取和执行下一条指令。</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn">Roxy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.roxyblog.cn/2024/07/26/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/">http://blog.roxyblog.cn/2024/07/26/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.roxyblog.cn" target="_blank">Roxy Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="../../../../tags/ARM/">ARM</a></div><div class="post_share"><div class="social-share" data-image="../../../../assets/images/1032/top.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="../../10/%E9%BA%A6%E5%85%8B%E9%A3%8E%E7%9A%84%E7%A7%8D%E7%B1%BB%E5%92%8C%E6%80%A7%E8%83%BD%E5%8F%82%E6%95%B0/"><img class="next-cover" src="../../../../assets/images/1031/89044801.jpg" onerror="onerror=null;src='../../../../img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">麦克风的种类和性能参数</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/08/05/aJirCcAp8PH6mo7.jpg" onerror="this.onerror=null;this.src='../img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Roxy</div><div class="author-info__description">踏出决定性的一步</div></div><div class="card-info-data site-data is-center"><a href="../archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="../tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="../categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RoxyKko"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/RoxyKko" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="../mailto:njy_roxy@outlook.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">英雄可不会临阵脱逃啊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">ARM微处理器基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM%E6%A0%B8%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">ARM核硬件结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM%E6%A0%B8%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">ARM核的数据流模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="toc-number">1.2.1.</span> <span class="toc-text">数据处理指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%8A%A0%E6%B3%95%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">示例流程：加法指令的执行</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="toc-number">1.2.2.</span> <span class="toc-text">内存访问指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%8A%A0%E8%BD%BD%E6%8C%87%E4%BB%A4%EF%BC%88LDR-R1-R0-4-%EF%BC%89"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">示例流程：加载指令（LDR R1, [R0, #4]）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AD%98%E5%82%A8%E6%8C%87%E4%BB%A4%EF%BC%88STR-R1-R0-4-%EF%BC%89"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">示例流程：存储指令（STR R1, [R0, #4]）</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="../2024/07/26/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" title="ARM微处理器基础学习（一）"><img src="../assets/images/1032/top.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="ARM微处理器基础学习（一）"/></a><div class="content"><a class="title" href="../2024/07/26/ARM%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" title="ARM微处理器基础学习（一）">ARM微处理器基础学习（一）</a><time datetime="2024-07-26T10:08:00.000Z" title="发表于 2024-07-26 18:08:00">2024-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2024/07/10/%E9%BA%A6%E5%85%8B%E9%A3%8E%E7%9A%84%E7%A7%8D%E7%B1%BB%E5%92%8C%E6%80%A7%E8%83%BD%E5%8F%82%E6%95%B0/" title="麦克风的种类和性能参数"><img src="../assets/images/1031/89044801.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="麦克风的种类和性能参数"/></a><div class="content"><a class="title" href="../2024/07/10/%E9%BA%A6%E5%85%8B%E9%A3%8E%E7%9A%84%E7%A7%8D%E7%B1%BB%E5%92%8C%E6%80%A7%E8%83%BD%E5%8F%82%E6%95%B0/" title="麦克风的种类和性能参数">麦克风的种类和性能参数</a><time datetime="2024-07-10T13:49:00.000Z" title="发表于 2024-07-10 21:49:00">2024-07-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2024/07/07/%E6%B1%87%E6%8A%A5%E8%BF%91%E5%86%B5-1/" title="汇报近况-1"><img src="../assets/images/1030/115301418.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="汇报近况-1"/></a><div class="content"><a class="title" href="../2024/07/07/%E6%B1%87%E6%8A%A5%E8%BF%91%E5%86%B5-1/" title="汇报近况-1">汇报近况-1</a><time datetime="2024-07-07T06:40:00.000Z" title="发表于 2024-07-07 14:40:00">2024-07-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/05/26/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0Uboot%E7%A7%BB%E6%A4%8D/" title="手把手教你Uboot移植"><img src="../assets/images/1022/106343944.png" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="手把手教你Uboot移植"/></a><div class="content"><a class="title" href="../2023/05/26/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0Uboot%E7%A7%BB%E6%A4%8D/" title="手把手教你Uboot移植">手把手教你Uboot移植</a><time datetime="2023-05-26T10:02:00.000Z" title="发表于 2023-05-26 18:02:00">2023-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="../2023/05/20/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" title="UBOOT、KERNEL移植过程（二）"><img src="../assets/images/1021/101210365_p0.jpg" onerror="this.onerror=null;this.src='../img/404.jpg'" alt="UBOOT、KERNEL移植过程（二）"/></a><div class="content"><a class="title" href="../2023/05/20/UBOOT%E3%80%81KERNEL%E7%A7%BB%E6%A4%8D%E8%BF%87%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" title="UBOOT、KERNEL移植过程（二）">UBOOT、KERNEL移植过程（二）</a><time datetime="2023-05-20T04:19:00.000Z" title="发表于 2023-05-20 12:19:00">2023-05-20</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('../../../../assets/images/1032/top.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Roxy</div><div class="footer_custom_text">©版权说明：本网站所有内容均收集于互联网或自己创作,<br>方便于网友与自己学习交流，如有侵权，请<a href = 'https://roxykko.github.io/messageboard/'>留言</a>，立即处理<br><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/"><span>备案号：桂ICP备2022011387号-1</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="../../../../js/utils.js"></script><script src="../../../../js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nNLGoFrFqOGrnjjwjlcvwhQ8-gzGzoHsz',
+      appKey: '8L52XkDfas8PNIFBJYD3oHUj',
+      avatar: 'retro',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
